@@ -1,0 +1,46 @@
+{
+	"info": {
+		"_postman_id": "d76e4848-fe8d-422f-8553-da00986b68d7",
+		"name": "Arch homework",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "be5164a4-eb91-46cb-a56a-50974de4c3d9",
+						"exec": [
+							"pm.test(\"Status is OK\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://arch.homework/otusapp/romanov/health",
+					"protocol": "http",
+					"host": [
+						"arch",
+						"homework"
+					],
+					"path": [
+						"otusapp",
+						"romanov",
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

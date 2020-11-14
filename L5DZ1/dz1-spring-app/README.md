@@ -42,7 +42,12 @@ Kubernetes
 kubectl apply -f deployment.yaml
 minikube service rvm-dz1-service --url -n myapp
 
+docker image prune -a
 kubectl delete all --all
 ```
+
+Postman
+
+`newman run 'Arch homework.postman_collection.json' `
 
 http://arch.homework/otusapp/romanov/health

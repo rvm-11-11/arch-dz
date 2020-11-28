@@ -27,3 +27,9 @@ curl -X POST "http://api.openapi-generator.tech/api/gen/servers/spring" -H "Acce
 
 https://maven.apache.org/guides/introduction/introduction-to-plugins.html
 https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/
+
+https://learning.postman.com/docs/writing-scripts/test-scripts/
+https://learning.postman.com/docs/writing-scripts/script-references/test-examples/
+https://stackoverflow.com/questions/43336057/postman-is-it-possible-to-customize-the-sequence-of-test-runs-in-the-collection
+https://learning.postman.com/docs/running-collections/intro-to-collection-runs/
+

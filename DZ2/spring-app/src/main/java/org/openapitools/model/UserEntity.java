@@ -2,18 +2,23 @@ package org.openapitools.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.openapitools.jackson.nullable.JsonNullable;
-import javax.validation.Valid;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.*;
 
 /**
  * User
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-11-22T08:00:48.814Z[Etc/UTC]")
-public class User   {
+@Entity
+public class UserEntity {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @JsonProperty("id")
   private Long id;
 
@@ -32,7 +37,7 @@ public class User   {
   @JsonProperty("phone")
   private String phone;
 
-  public User id(Long id) {
+  public UserEntity id(Long id) {
     this.id = id;
     return this;
   }
@@ -52,7 +57,7 @@ public class User   {
     this.id = id;
   }
 
-  public User username(String username) {
+  public UserEntity username(String username) {
     this.username = username;
     return this;
   }
@@ -63,7 +68,7 @@ public class User   {
   */
   @ApiModelProperty(value = "")
 
-@Size(max=256) 
+@Size(max=256)
   public String getUsername() {
     return username;
   }
@@ -72,7 +77,7 @@ public class User   {
     this.username = username;
   }
 
-  public User firstName(String firstName) {
+  public UserEntity firstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -92,7 +97,7 @@ public class User   {
     this.firstName = firstName;
   }
 
-  public User lastName(String lastName) {
+  public UserEntity lastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -112,7 +117,7 @@ public class User   {
     this.lastName = lastName;
   }
 
-  public User email(String email) {
+  public UserEntity email(String email) {
     this.email = email;
     return this;
   }
@@ -132,7 +137,7 @@ public class User   {
     this.email = email;
   }
 
-  public User phone(String phone) {
+  public UserEntity phone(String phone) {
     this.phone = phone;
     return this;
   }
@@ -161,7 +166,7 @@ public class User   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    User user = (User) o;
+    UserEntity user = (UserEntity) o;
     return Objects.equals(this.id, user.id) &&
         Objects.equals(this.username, user.username) &&
         Objects.equals(this.firstName, user.firstName) &&
@@ -179,7 +184,7 @@ public class User   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class User {\n");
-    
+
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    firstName: ").append(toIndentedString(firstName)).append("\n");

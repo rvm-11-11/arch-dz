@@ -5,22 +5,20 @@
  */
 package org.openapitools.api;
 
-import org.openapitools.model.Error;
-import org.openapitools.model.User;
 import io.swagger.annotations.*;
+import org.openapitools.model.Error;
+import org.openapitools.model.UserEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-11-22T08:00:48.814Z[Etc/UTC]")
 @Validated
 @Api(value = "user", description = "the user API")
@@ -37,14 +35,14 @@ public interface UserApi {
      * @param user Created user object (required)
      * @return successful operation (status code 200)
      */
-    @ApiOperation(value = "Create user", nickname = "createUser", notes = "This can only be done by the logged in user.", tags={ "user", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "successful operation") })
+    @ApiOperation(value = "Create user", nickname = "createUser", notes = "This can only be done by the logged in user.", tags = {"user",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful operation")})
     @PostMapping(
-        value = "/user",
-        consumes = { "application/json" }
+            value = "/user",
+            consumes = {"application/json"}
     )
-    default ResponseEntity<Void> createUser(@ApiParam(value = "Created user object" ,required=true )  @Valid @RequestBody User user) {
+    default ResponseEntity<UserEntity> createUser(@ApiParam(value = "Created user object", required = true) @Valid @RequestBody CreateUpdateUserRequest user) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -56,19 +54,31 @@ public interface UserApi {
      *
      * @param userId ID of user (required)
      * @return user deleted (status code 204)
-     *         or unexpected error (status code 200)
+     * or unexpected error (status code 200)
      */
-    @ApiOperation(value = "", nickname = "deleteUser", notes = "deletes a single user based on the ID supplied", tags={ "user", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 204, message = "user deleted"),
-        @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+    @ApiOperation(value = "", nickname = "deleteUser", notes = "deletes a single user based on the ID supplied", tags = {"user",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "user deleted"),
+            @ApiResponse(code = 200, message = "unexpected error", response = Error.class)})
     @DeleteMapping(
-        value = "/user/{userId}",
-        produces = { "application/json" }
+            value = "/user/{userId}",
+            produces = {"application/json"}
     )
-    default ResponseEntity<Void> deleteUser(@ApiParam(value = "ID of user",required=true) @PathVariable("userId") Long userId) {
+    default ResponseEntity<Void> deleteUser(@ApiParam(value = "ID of user", required = true) @PathVariable("userId") Long userId) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
+    }
+
+    @ApiOperation(value = "", nickname = "findAll", notes = "Returns all users", response = UserEntity.class, tags = {"user",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "user response", response = UserEntity.class),
+            @ApiResponse(code = 200, message = "unexpected error", response = Error.class)})
+    @GetMapping(
+            value = "/users",
+            produces = {"application/json"}
+    )
+    default ResponseEntity<List<UserEntity>> findAll() {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 
@@ -78,19 +88,19 @@ public interface UserApi {
      *
      * @param userId ID of user (required)
      * @return user response (status code 200)
-     *         or unexpected error (status code 200)
+     * or unexpected error (status code 200)
      */
-    @ApiOperation(value = "", nickname = "findUserById", notes = "Returns a user based on a single ID, if the user does not have access to the user", response = User.class, tags={ "user", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "user response", response = User.class),
-        @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+    @ApiOperation(value = "", nickname = "findUserById", notes = "Returns a user based on a single ID, if the user does not have access to the user", response = UserEntity.class, tags = {"user",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "user response", response = UserEntity.class),
+            @ApiResponse(code = 200, message = "unexpected error", response = Error.class)})
     @GetMapping(
-        value = "/user/{userId}",
-        produces = { "application/json" }
+            value = "/user/{userId}",
+            produces = {"application/json"}
     )
-    default ResponseEntity<User> findUserById(@ApiParam(value = "ID of user",required=true) @PathVariable("userId") Long userId) {
+    default ResponseEntity<UserEntity> findUserById(@ApiParam(value = "ID of user", required = true) @PathVariable("userId") Long userId) {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"phone\" : \"phone\", \"id\" : 0, \"email\" : \"email\", \"username\" : \"username\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -108,20 +118,20 @@ public interface UserApi {
      * Update user with User ID supplied
      *
      * @param userId ID of user (required)
-     * @param user  (optional)
+     * @param user   (optional)
      * @return user updated (status code 200)
-     *         or unexpected error (status code 200)
+     * or unexpected error (status code 200)
      */
-    @ApiOperation(value = "", nickname = "updateUser", notes = "Update user with User ID supplied", tags={ "user", })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "user updated"),
-        @ApiResponse(code = 200, message = "unexpected error", response = Error.class) })
+    @ApiOperation(value = "", nickname = "updateUser", notes = "Update user with User ID supplied", tags = {"user",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "user updated"),
+            @ApiResponse(code = 200, message = "unexpected error", response = Error.class)})
     @PutMapping(
-        value = "/user/{userId}",
-        produces = { "application/json" },
-        consumes = { "application/json" }
+            value = "/user/{userId}",
+            produces = {"application/json"},
+            consumes = {"application/json"}
     )
-    default ResponseEntity<Void> updateUser(@ApiParam(value = "ID of user",required=true) @PathVariable("userId") Long userId,@ApiParam(value = ""  )  @Valid @RequestBody(required = false) User user) {
+    default ResponseEntity<Void> updateUser(@ApiParam(value = "ID of user", required = true) @PathVariable("userId") Long userId, @ApiParam(value = "") @Valid @RequestBody(required = false) CreateUpdateUserRequest user) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

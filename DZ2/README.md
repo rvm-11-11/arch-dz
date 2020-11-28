@@ -24,3 +24,6 @@ http://api.openapi-generator.tech/index.html
 ```
 curl -X POST "http://api.openapi-generator.tech/api/gen/servers/spring" -H "Accept: */*" -H "Content-Type: application/json" -d "{ \"openAPIUrl\": \"https://api.swaggerhub.com/apis/otus55/users/1.0.0\", \"options\": {}, \"spec\": {}}"
 ```
+
+https://maven.apache.org/guides/introduction/introduction-to-plugins.html
+https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/

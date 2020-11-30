@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-dz2-deployment
+  labels:
+    app: dz2-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dz2-app
+  template:
+    metadata:
+      labels:
+        app: dz2-app
+    spec:
+      containers:
+        - name: dz2
+          image: rvm1111/arch:dz2v1
+          ports:
+            - name: web
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+            initialDelaySeconds: 10
+            periodSeconds: 5

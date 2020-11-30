@@ -1,9 +1,4 @@
-K8s
 
-```
-watch kubectl get all
-kubectl delete all --all
-```
 
 Background
 
@@ -33,3 +28,49 @@ https://learning.postman.com/docs/writing-scripts/script-references/test-example
 https://stackoverflow.com/questions/43336057/postman-is-it-possible-to-customize-the-sequence-of-test-runs-in-the-collection
 https://learning.postman.com/docs/running-collections/intro-to-collection-runs/
 
+```
+newman run DZ2-User-API.postman_collection.json -e localhost.postman_environment.json
+```
+
+K8s
+
+ReplicaSet tracks containers by labels
+Deployment is higher level concept which manages ReplicaSets internally therefore recommended to use -- possible to easily update images and rollback changes, upscale and downscale.
+Service -- can do load balancing.
+Service discovery can be done via environment variables or via service FQDN.
+Skaffold convenient for assembling Docker images, changing and applying manifests in one command.
+Blue Green -- two deployment running in parallel and switch just by updating selector label.
+Ingress does the routing e.g. rewrites URLs
+StatefulSet allows do work with storage e.g. for DB.
+ConfigMap to store configuration, can be referenced from deployment.
+Secrets are actually Base64, not really secrets, just cannot be spied.
+ 
+
+```
+minikube start
+kubectl config set-context --current --namespace=myapp
+kubectl desctibe pod hello-demo
+kubectl set image deployment/hello-deployment hello-py=hello-py:v2 --record
+minikube service hello-service --url -n myapp
+skaffold init
+skaffold run
+
+helm create dz2-chart
+helm dependency update ./dz2-chart
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install my-release bitnami/postgresql
+helm install my-release bitnami/postgresql --set postgresqlPassword=abc123
+helm uninstall my-release
+kubectl get pv
+kubectl get pvc
+
+kubectl describe pv pvc-169c264a-b6d3-4d46-8daa-dbfdce7570a5 | grep Finalizers
+kubectl patch pv pvc-169c264a-b6d3-4d46-8daa-dbfdce7570a5 -p '{"metadata":{"finalizers": []}}' --type=merge
+
+
+watch kubectl get all
+kubectl delete all --all
+```
+
+https://stackoverflow.com/questions/51358856/kubernetes-cant-delete-persistentvolumeclaim-pvc

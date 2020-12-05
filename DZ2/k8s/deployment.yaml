@@ -19,14 +19,20 @@ spec:
           image: rvm1111/arch:dz2v2
           env:
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mariadb://my-release-mariadb:3306/my_db
+              valueFrom:
+                configMapKeyRef:
+                  name: dz2-config
+                  key: SPRING_DATASOURCE_URL
             - name: SPRING_DATASOURCE_USERNAME
-              value: root
+              valueFrom:
+                configMapKeyRef:
+                  name: dz2-config
+                  key: SPRING_DATASOURCE_USERNAME
             - name: SPRING_DATASOURCE_PASSWORD
-              value: secretpassword123
-#              spring.datasource.url=jdbc:mariadb://localhost:3306/my_db
-#              spring.datasource.username=root
-#              spring.datasource.password=secretpassword123
+              valueFrom:
+                secretKeyRef:
+                  name: dz2-secret
+                  key: SPRING_DATASOURCE_PASSWORD
           ports:
             - name: web
               containerPort: 8080
@@ -41,5 +47,5 @@ spec:
             httpGet:
               port: 8080
               path: /health
-            initialDelaySeconds: 40
+            initialDelaySeconds: 45
             periodSeconds: 5

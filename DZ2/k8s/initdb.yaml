@@ -15,6 +15,7 @@ spec:
               mysql -u root -h my-release-mariadb -p'secretpassword123' <<'EOF'
                 CREATE DATABASE IF NOT EXISTS my_db;
                 USE my_db;
+                CREATE SEQUENCE IF NOT EXISTS hibernate_sequence;
                 CREATE TABLE IF NOT EXISTS `user_entity` (
                     `id` bigint(20) NOT NULL,
                     `email` varchar(255) DEFAULT NULL,

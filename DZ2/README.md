@@ -86,6 +86,8 @@ helm install my-release bitnami/mariadb
 helm install my-release \
   --set auth.rootPassword=secretpassword123,auth.database=app_database \
     bitnami/mariadb
+kubectl exec --stdin --tty pod/my-release-mariadb-0 -- /bin/bash
+mysql -u root -p'secretpassword123'
 helm uninstall my-release
 
 kubectl apply -f initdb.yaml 

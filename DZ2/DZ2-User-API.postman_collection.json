@@ -6,6 +6,42 @@
 	},
 	"item": [
 		{
+			"name": "0. Healthcheck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e1f4991a-30a4-4e41-8d4a-4c19b7a7950c",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body contains expected data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.be.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/health",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "1. Check initial user (added via migrations)",
 			"event": [
 				{
@@ -311,6 +347,39 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "7. Check user deleted Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dc604cf8-c750-4675-b8cb-094deb2eb0a8",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -337,7 +406,7 @@
 	],
 	"variable": [
 		{
-			"id": "ece2a636-2bbf-4ab2-b692-9e18e049adcc",
+			"id": "93ac7a29-c51f-4e8d-ac69-abb97a67798f",
 			"key": "userId",
 			"value": ""
 		}

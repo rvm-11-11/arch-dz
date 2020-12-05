@@ -59,9 +59,21 @@ skaffold run
 helm create dz2-chart
 helm dependency update ./dz2-chart
 
+docker run --publish 3306:3306 --name some-mariadb -e MYSQL_ROOT_PASSWORD=secretpassword123 -d mariadb:10
+docker exec -it some-mariadb /bin/bash
+mysql -u root -p secretpassword123
+CREATE DATABASE my_db;
+USE my_db:
+CREATE TABLE Users (Id int, Name varchar(255));
+INSERT INTO Users VALUES (1, 'Ivan');
+SELECT * FROM Users;
+
+helm list
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/postgresql
-helm install my-release bitnami/postgresql --set postgresqlPassword=abc123
+helm install my-release bitnami/mariadb
+helm install my-release \
+  --set auth.rootPassword=secretpassword123,auth.database=app_database \
+    bitnami/mariadb
 helm uninstall my-release
 kubectl get pv
 kubectl get pvc
@@ -80,3 +92,5 @@ https://stackoverflow.com/questions/64125048/get-error-unknown-field-servicename
 https://stackoverflow.com/questions/51358856/kubernetes-cant-delete-persistentvolumeclaim-pvc
 https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/
 https://medium.com/@ManagedKube/kubernetes-troubleshooting-ingress-and-services-traffic-flows-547ea867b120
+https://artifacthub.io/packages/helm/bitnami/mariadb
+https://hub.docker.com/_/mariadb

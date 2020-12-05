@@ -5,8 +5,7 @@
 java -jar target/dz2-spring-app-1.0.0.jar 
 docker build --tag rvm1111/arch:dz2v1 .
 docker run --publish 8000:8080 --detach rvm1111/arch:dz2v1
-
-
+docker push rvm1111/arch:dz2v1
 ```
 
 # OpenAPI generated server

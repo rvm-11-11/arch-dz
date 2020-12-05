@@ -13,4 +13,4 @@ spec:
           - path: /otusapp/romanov($|/)(.*)
             backend:
               serviceName: rvm-dz2-service
-              servicePort: 8000
+              servicePort: 8080

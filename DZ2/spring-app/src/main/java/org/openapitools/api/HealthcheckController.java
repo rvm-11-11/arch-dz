@@ -11,6 +11,6 @@ public class HealthcheckController {
     @RequestMapping("/health")
     public String health() {
         log.info("Calling health()");
-        return "{\"status\": \"OK\"}";
+        return "{\"status\": \"OK\", \"version\": \"v2\"}";
     }
 }

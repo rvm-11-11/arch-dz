@@ -45,13 +45,14 @@ StatefulSet allows do work with storage e.g. for DB.
 ConfigMap to store configuration, can be referenced from deployment.
 Secrets are actually Base64, not really secrets, just cannot be spied.
  
+###Did a lot of debugging, bottom line -- remove existing resources fromo all namespaces!
 
 ```
 minikube start
 kubectl config set-context --current --namespace=myapp
 kubectl desctibe pod hello-demo
 kubectl set image deployment/hello-deployment hello-py=hello-py:v2 --record
-minikube service hello-service --url -n myapp
+minikube service rvm-dz2-service --url -n myapp
 skaffold init
 skaffold run
 
@@ -70,7 +71,12 @@ kubectl patch pv pvc-169c264a-b6d3-4d46-8daa-dbfdce7570a5 -p '{"metadata":{"fina
 
 
 watch kubectl get all
-kubectl delete all --all
+kubectl get ingress --all-namespaces
+kubectl delete all --all -n myapp
 ```
 
+
+https://stackoverflow.com/questions/64125048/get-error-unknown-field-servicename-in-io-k8s-api-networking-v1-ingressbacken
 https://stackoverflow.com/questions/51358856/kubernetes-cant-delete-persistentvolumeclaim-pvc
+https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/
+https://medium.com/@ManagedKube/kubernetes-troubleshooting-ingress-and-services-traffic-flows-547ea867b120

@@ -7,6 +7,6 @@ spec:
     app: dz2-app
   ports:
     - protocol: TCP
-      port: 8000
+      port: 8080
       targetPort: web
   type: NodePort

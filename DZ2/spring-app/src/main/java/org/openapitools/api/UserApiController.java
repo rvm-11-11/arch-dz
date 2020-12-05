@@ -68,7 +68,7 @@ public class UserApiController implements UserApi {
     @Override
     public ResponseEntity<Void> updateUser(Long userId, @Valid CreateUpdateUserRequest user) {
         UserEntity userEntity = user.toUserEntity().id(userId);
-        repository.save(userEntity);
+        repository.saveAndFlush(userEntity);
         return null;
     }
 }

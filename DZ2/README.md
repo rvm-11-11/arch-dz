@@ -63,8 +63,20 @@ docker run --publish 3306:3306 --name some-mariadb -e MYSQL_ROOT_PASSWORD=secret
 docker exec -it some-mariadb /bin/bash
 mysql -u root -p secretpassword123
 CREATE DATABASE my_db;
+CREATE TABLE `user_entity` (   
+    `id` bigint(20) NOT NULL,   
+    `email` varchar(255) DEFAULT NULL,   
+    `first_name` varchar(255) DEFAULT NULL,   
+    `last_name` varchar(255) DEFAULT NULL,   
+    `phone` varchar(255) DEFAULT NULL,   
+    `username` varchar(255) DEFAULT NULL,   
+    PRIMARY KEY (`id`) ) 
+    ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+INSERT INTO user_entity (id, email, first_name, last_name, phone, username)
+    VALUES ('74', 'email74', 'firstName74', 'lastName74', 'phone74', 'username74');
+
 USE my_db:
-CREATE TABLE Users (Id int, Name varchar(255));
+CREATE TABLE TestUsers (Id int, Name varchar(255));
 INSERT INTO Users VALUES (1, 'Ivan');
 SELECT * FROM Users;
 

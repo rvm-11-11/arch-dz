@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: dz2-config-helm
 data:
-  SPRING_DATASOURCE_URL: jdbc:mariadb://my-release-mariadb:3306/my_db
+  SPRING_DATASOURCE_URL: {{ printf "jdbc:mariadb://%s:3306/my_db"  (include "mariadb.fullname" .) }}
   SPRING_DATASOURCE_USERNAME: root
 ---
 apiVersion: v1
@@ -12,4 +12,4 @@ metadata:
   name: dz2-secret-helm
 type: Opaque
 data:
-  SPRING_DATASOURCE_PASSWORD: {{.Values.externalMaria.mariaPassword  | b64enc}}
+  SPRING_DATASOURCE_PASSWORD: {{.Values.mariadb.auth.rootPassword  | b64enc}}

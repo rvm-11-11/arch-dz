@@ -91,8 +91,7 @@ mysql -u root -p'secretpassword123'
 helm uninstall my-release
 
 kubectl apply -f initdb.yaml 
-kubectl exec --stdin --tty pod/myapp-db-init-4wtll -- /bin/bash
-kubectl exec --stdin --tty pod/test-for-db-init-maria   -- /bin/bash
+kubectl exec --stdin --tty pod/myapp-mariadb-0 -- /bin/bash
 mysql -u root -h 10.111.234.65 -p'secretpassword123'
 mysql -u root -h my-release-mariadb -p'secretpassword123'
 
@@ -103,6 +102,7 @@ kubectl get pvc
 kubectl describe pv pvc-169c264a-b6d3-4d46-8daa-dbfdce7570a5 | grep Finalizers
 kubectl patch pv pvc-169c264a-b6d3-4d46-8daa-dbfdce7570a5 -p '{"metadata":{"finalizers": []}}' --type=merge
 
+kubectl logs pod/myapp-db-init-lq4g4 -c check-db-ready
 
 watch kubectl get all
 kubectl get ingress --all-namespaces

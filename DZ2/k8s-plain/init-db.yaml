@@ -25,7 +25,7 @@ spec:
                     `username` varchar(255) DEFAULT NULL,
                     PRIMARY KEY (`id`) )
                     ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-                  INSERT INTO user_entity (id, email, first_name, last_name, phone, username)
+                  REPLACE INTO user_entity (id, email, first_name, last_name, phone, username)
                     VALUES ('74', 'email74', 'firstName74', 'lastName74', 'phone74', 'username74');
                   SELECT * FROM user_entity;
               EOF

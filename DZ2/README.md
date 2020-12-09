@@ -1,6 +1,25 @@
+###Scripts for k8s-plain:
+```
+helm install my-release -f mariadb-values.yaml bitnami/mariadb
+kubectl apply -f init-db.yaml
+kubectl apply -f app-config.yaml -f deployment.yaml -f service.yaml -f  ingress.yaml
+```
 
+###Postman test command:
+```
+newman run DZ2-User-API.postman_collection.json --environment=local-k8s-ingress.postman_environment.json
+```
 
-Background
+###Clean-up scripts:
+```
+helm uninstall my-release
+kubectl delete all --all -n=myapp
+kubectl delete ingress --all -n=myapp
+kubectl delete pvc --all -n=myapp
+kubectl delete pv --all -n=myapp
+```
+
+###Background
 
 https://spring.io/guides/tutorials/rest/
 https://spring.io/guides/gs/accessing-data-rest/
@@ -108,6 +127,7 @@ watch kubectl get all
 kubectl get ingress --all-namespaces
 kubectl delete all --all -n myapp
 ```
+
 
 
 https://stackoverflow.com/questions/64125048/get-error-unknown-field-servicename-in-io-k8s-api-networking-v1-ingressbacken

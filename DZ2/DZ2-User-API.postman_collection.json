@@ -349,7 +349,7 @@
 			"response": []
 		},
 		{
-			"name": "7. Check user deleted Copy",
+			"name": "8. Get all users",
 			"event": [
 				{
 					"listen": "test",
@@ -406,7 +406,7 @@
 	],
 	"variable": [
 		{
-			"id": "93ac7a29-c51f-4e8d-ac69-abb97a67798f",
+			"id": "8658abb4-614f-4f1c-bbaa-553bddbc6a81",
 			"key": "userId",
 			"value": ""
 		}

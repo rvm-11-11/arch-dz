@@ -5,6 +5,11 @@ kubectl apply -f init-db.yaml
 kubectl apply -f app-config.yaml -f deployment.yaml -f service.yaml -f  ingress.yaml
 ```
 
+###Scripts for k8s-helm:
+```
+helm install my-helm-app .
+```
+
 ###Postman test command:
 ```
 newman run DZ2-User-API.postman_collection.json --environment=local-k8s-ingress.postman_environment.json
@@ -13,6 +18,7 @@ newman run DZ2-User-API.postman_collection.json --environment=local-k8s-ingress.
 ###Clean-up scripts:
 ```
 helm uninstall my-release
+helm uninstall my-helm-app
 kubectl delete all --all -n=myapp
 kubectl delete ingress --all -n=myapp
 kubectl delete pvc --all -n=myapp

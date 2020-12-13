@@ -1,0 +1,415 @@
+{
+	"info": {
+		"_postman_id": "5b2c65e8-dbf9-4829-88ef-d973e0563b8f",
+		"name": "DZ2-User-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "0. Healthcheck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e1f4991a-30a4-4e41-8d4a-4c19b7a7950c",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body contains expected data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.be.eql(\"OK\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/health",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1. Check initial user (added via migrations)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b6f0f5f2-5ea2-4f95-9d58-56dc32fb1518",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body contains expected data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.be.a('number');",
+							"    pm.expect(jsonData.username).to.eql(\"username74\");",
+							"    pm.expect(jsonData.firstName).to.eql(\"firstName74\");",
+							"    pm.expect(jsonData.lastName).to.eql(\"lastName74\");",
+							"    pm.expect(jsonData.email).to.eql(\"email74\");",
+							"    pm.expect(jsonData.phone).to.eql(\"phone74\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/74",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"74"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Create User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9cc9ef8d-42f8-475b-be10-e915c52348f3",
+						"exec": [
+							"var responseJSON = JSON.parse(responseBody)",
+							"pm.collectionVariables.set(\"userId\", responseJSON[\"id\"])",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body contains expected data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.be.a('number');",
+							"    pm.expect(jsonData.username).to.eql(\"username1\");",
+							"    pm.expect(jsonData.firstName).to.eql(\"firstName1\");",
+							"    pm.expect(jsonData.lastName).to.eql(\"lastName1\");",
+							"    pm.expect(jsonData.email).to.eql(\"email1\");",
+							"    pm.expect(jsonData.phone).to.eql(\"phone1\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"email1\",\n  \"firstName\": \"firstName1\",\n  \"lastName\": \"lastName1\",\n  \"phone\": \"phone1\",\n  \"username\": \"username1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Check user created",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9f13e018-887d-4322-a53c-10eb997686fa",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body contains expected data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.be.a('number');",
+							"    pm.expect(jsonData.username).to.eql(\"username1\");",
+							"    pm.expect(jsonData.firstName).to.eql(\"firstName1\");",
+							"    pm.expect(jsonData.lastName).to.eql(\"lastName1\");",
+							"    pm.expect(jsonData.email).to.eql(\"email1\");",
+							"    pm.expect(jsonData.phone).to.eql(\"phone1\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Update User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e31866f6-46b0-4779-b599-a25b3cf095ba",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"email2\",\n  \"firstName\": \"firstName2\",\n  \"lastName\": \"lastName2\",\n  \"phone\": \"phone2\",\n  \"username\": \"username2\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Check user updated",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5fb89843-2764-4401-bd6c-f4cf36816ffd",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body contains expected data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.id).to.be.a('number');",
+							"    pm.expect(jsonData.username).to.eql(\"username2\");",
+							"    pm.expect(jsonData.firstName).to.eql(\"firstName2\");",
+							"    pm.expect(jsonData.lastName).to.eql(\"lastName2\");",
+							"    pm.expect(jsonData.email).to.eql(\"email2\");",
+							"    pm.expect(jsonData.phone).to.eql(\"phone2\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e122a2d4-0f77-46e0-b396-39e9cacff48e",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"string\",\n  \"firstName\": \"string\",\n  \"lastName\": \"string\",\n  \"phone\": \"string\",\n  \"username\": \"string\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. Check user deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "64b200a4-91de-4473-838e-e73ba64d91b8",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/user/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8. Get all users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dc604cf8-c750-4675-b8cb-094deb2eb0a8",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b3c6b433-7a7b-469f-8739-1a8944df38d7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "3b496c95-ed97-4228-be63-6e5ec582737d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "8658abb4-614f-4f1c-bbaa-553bddbc6a81",
+			"key": "userId",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}

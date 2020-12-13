@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-dz2-deployment
+  labels:
+    app: dz2-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dz2-app
+  template:
+    metadata:
+      labels:
+        app: dz2-app
+    spec:
+      containers:
+        - name: dz2
+          image: rvm1111/arch:dz2v2
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: dz2-config
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: dz2-config
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dz2-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+          ports:
+            - name: web
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+            initialDelaySeconds: 40
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+            initialDelaySeconds: 45
+            periodSeconds: 5

@@ -27,6 +27,18 @@ spec:
       serviceAccountName: {{ include "myapp.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: check-db-ready
+          image: mariadb:latest
+          env:
+            - name: MARIA_HOST
+              value: {{(include "mariadb.fullname" .)}}
+          command:
+            - sh
+            - "-c"
+            - |
+              until mysqladmin ping -u root -h $MARIA_HOST  -p'{{.Values.mariadb.auth.rootPassword }}';
+              do echo waiting for database; sleep 2; done;
       containers:
         - name: {{ .Chart.Name }}
           securityContext:

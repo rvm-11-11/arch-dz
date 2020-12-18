@@ -1,5 +1,6 @@
 package org.openapitools.api;
 
+import io.micrometer.core.annotation.Timed;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("${openapi.userService.base-path:/api/v1}")
 @RequiredArgsConstructor
+//@Timed
 public class UserApiController implements UserApi {
 
     private final NativeWebRequest request;
@@ -32,12 +34,14 @@ public class UserApiController implements UserApi {
         return Optional.ofNullable(request);
     }
 
+    @Timed(percentiles = {0.5, 0.95, 0.99})
     @Override
     public ResponseEntity<UserEntity> createUser(@Valid CreateUpdateUserRequest user) {
         UserEntity u = repository.save(user.toUserEntity());
         return ResponseEntity.of(Optional.of(u));
     }
 
+    @Timed(percentiles = {0.5, 0.95, 0.99})
     @Override
     public ResponseEntity<Void> deleteUser(Long userId) {
         repository.deleteById(userId);
@@ -53,6 +57,7 @@ public class UserApiController implements UserApi {
             produces = { "application/json" }
     )
     @Override
+    @Timed(percentiles = {0.5, 0.95, 0.99})
     public ResponseEntity<List<UserEntity>> findAll() {
         List<UserEntity> users = new ArrayList<>();
         repository.findAll().forEach(users::add);
@@ -60,12 +65,14 @@ public class UserApiController implements UserApi {
     }
 
     @Override
+    @Timed(percentiles = {0.5, 0.95, 0.99})
     public ResponseEntity<UserEntity> findUserById(Long userId) {
         Optional<UserEntity> u = repository.findById(userId);
         return ResponseEntity.of(u);
     }
 
     @Override
+    @Timed(percentiles = {0.5, 0.95, 0.99})
     public ResponseEntity<Void> updateUser(Long userId, @Valid CreateUpdateUserRequest user) {
         UserEntity userEntity = user.toUserEntity().id(userId);
         repository.saveAndFlush(userEntity);

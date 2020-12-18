@@ -40,3 +40,10 @@ kubectl describe servicemonitors.monitoring.coreos.com my-helm-app-myapp
 https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html
 https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-metrics-export-prometheus
 https://stackabuse.com/monitoring-spring-boot-apps-with-micrometer-prometheus-and-grafana/
+WTF is this project? -- https://docs.spring.io/spring-metrics/docs/current/public/prometheus
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-metrics
+https://github.com/prometheus/client_java
+Dashboard for Micrometer instrumented applications  -- https://grafana.com/grafana/dashboards/4701
+
+https://prometheus.io/docs/prometheus/latest/getting_started/
+https://blog.autsoft.hu/defining-custom-metrics-in-a-spring-boot-application-using-micrometer/

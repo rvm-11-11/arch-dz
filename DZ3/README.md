@@ -35,6 +35,8 @@ helm upgrade my-helm-app ./my-helm-app --atomic
 kubectl get servicemonitors.monitoring.coreos.com
 kubectl describe servicemonitors.monitoring.coreos.com my-helm-app-myapp  
 
+helm upgrade nginx stable/nginx-ingress -f nginx-ingress.yaml
+
 ```
 http://arch.homework/otusapp/romanov/version
 http://arch.homework/otusapp/romanov/actuator/prometheus
@@ -47,6 +49,8 @@ ab -n 50 -c 5 http://localhost:8080/health ;
 
 sum(rate(http_server_requests_seconds_count[1m]))
 ```
+
+## App charts
 1. Latency (response time) с квантилями по 0.5, 0.95, 0.99, max
 
 histogram_quantile(0.5, (sum by (le)(rate(app_request_latency_seconds_bucket{exported_endpoint="/db"}[1m]))))
@@ -60,10 +64,41 @@ sum by (uri) (rate(http_server_requests_seconds_count[1m]))
 
 3. Error Rate
 
-sum by (uri) (rate(http_server_requests_seconds_count{status="500"}[1m]))
+sum by (uri) (rate(http_server_requests_seconds_count{status=~"5.+"}[1m]))
+
+## Same for ingress:
+
+4. Latency (response time) quantiles 0.5, 0.95, 0.99, max
+
+```
+histogram_quantile(0.5, (sum by (le) (rate(nginx_ingress_controller_request_duration_seconds_bucket[5m]))))
+histogram_quantile(0.95, (sum by (le) (rate(nginx_ingress_controller_request_duration_seconds_bucket[5m]))))
+histogram_quantile(0.99, (sum by (le) (rate(nginx_ingress_controller_request_duration_seconds_bucket[5m]))))
+histogram_quantile(1, (sum by (le) (rate(nginx_ingress_controller_request_duration_seconds_bucket[5m]))))
+```
+
+5. RPS
+
+```
+sum(rate(nginx_ingress_controller_request_duration_seconds_count[5m]))
+```
+
+6. Error Rate
+
+```
+sum(increase(nginx_ingress_controller_request_duration_seconds_count{status=~"5.+"}[5m]))
+```
+
+
+helm dependency update ./my-helm-app
+
+Cleanup:
+
 ```
 helm uninstall my-helm-app
 ```
+
+Background:
 
 https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html
 https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-features.html#production-ready-metrics-export-prometheus
@@ -82,3 +117,7 @@ https://likegeeks.com/bash-script-easy-guide/
 https://likegeeks.com/bash-scripting-step-step-part2/
 
 https://httpd.apache.org/docs/2.4/programs/ab.html
+https://stackoverflow.com/questions/60634832/postman-launches-with-a-blank-screen
+
+
+https://medium.com/bitnami-perspectives/monitoring-a-mariadb-server-using-prometheus-and-grafana-5ee3d1c5360e

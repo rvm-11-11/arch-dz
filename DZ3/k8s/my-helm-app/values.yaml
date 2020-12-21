@@ -79,12 +79,12 @@ tolerations: []
 
 affinity: {}
 
-#externalMaria:
-#  mariaPassword: secretpassword123
-#  enabled: true
-
 mariadb:
   enabled: true
+  metrics:
+    enabled: true
+  serviceMonitor:
+    enabled: true
   auth:
     rootPassword: secretpassword123
     database: my_db

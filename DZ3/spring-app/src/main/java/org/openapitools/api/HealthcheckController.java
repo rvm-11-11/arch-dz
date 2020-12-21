@@ -24,12 +24,11 @@ public class HealthcheckController {
     }
 
     private MeterRegistry meterRegistry;
-//    Counter counter = meterRegistry.counter("rvm.counter");
 
     @Value("${my.version}")
     private String version;
 
-    @Timed(percentiles = {0.5, 0.95, 0.99})
+    @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
     @RequestMapping("/health")
     public Map<String, String> health() {
         log.info("Calling health()");
@@ -39,7 +38,7 @@ public class HealthcheckController {
         return response;
     }
 
-    @Timed(percentiles = {0.5, 0.95, 0.99})
+    @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
     @RequestMapping("/version")
     public Map<String, String> version() {
         log.info("Calling version()");
@@ -53,8 +52,6 @@ public class HealthcheckController {
         log.info("Calling exception()");
         if (1 == 1)
             throw new RuntimeException();
-//        Map<String, String> response = new HashMap();
-//        response.put("version", version);
         return  null;
     }
 }

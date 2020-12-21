@@ -91,15 +91,12 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-actuator:2.3.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-actuator-autoconfigure:2.3.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-actuator:2.3.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: io.micrometer:micrometer-registry-prometheus:1.5.4" level="project" />
+    <orderEntry type="library" name="Maven: io.prometheus:simpleclient_common:0.8.1" level="project" />
+    <orderEntry type="library" name="Maven: io.prometheus:simpleclient:0.8.1" level="project" />
     <orderEntry type="library" name="Maven: io.micrometer:micrometer-core:1.5.4" level="project" />
     <orderEntry type="library" name="Maven: org.hdrhistogram:HdrHistogram:2.1.12" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.latencyutils:LatencyUtils:2.0.3" level="project" />
-    <orderEntry type="library" name="Maven: io.micrometer:micrometer-registry-prometheus:1.5.4" level="project" />
-    <orderEntry type="library" name="Maven: io.prometheus:simpleclient_common:0.8.1" level="project" />
-    <orderEntry type="library" name="Maven: io.prometheus:simpleclient:0.9.0" level="project" />
-    <orderEntry type="library" name="Maven: io.prometheus:simpleclient_hotspot:0.9.0" level="project" />
-    <orderEntry type="library" name="Maven: io.prometheus:simpleclient_httpserver:0.9.0" level="project" />
-    <orderEntry type="library" name="Maven: io.prometheus:simpleclient_pushgateway:0.9.0" level="project" />
     <orderEntry type="library" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
   </component>
 </module>

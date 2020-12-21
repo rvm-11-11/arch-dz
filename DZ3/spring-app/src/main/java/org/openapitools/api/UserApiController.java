@@ -34,14 +34,14 @@ public class UserApiController implements UserApi {
         return Optional.ofNullable(request);
     }
 
-    @Timed(percentiles = {0.5, 0.95, 0.99})
+    @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
     @Override
     public ResponseEntity<UserEntity> createUser(@Valid CreateUpdateUserRequest user) {
         UserEntity u = repository.save(user.toUserEntity());
         return ResponseEntity.of(Optional.of(u));
     }
 
-    @Timed(percentiles = {0.5, 0.95, 0.99})
+    @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
     @Override
     public ResponseEntity<Void> deleteUser(Long userId) {
         repository.deleteById(userId);
@@ -57,7 +57,7 @@ public class UserApiController implements UserApi {
             produces = { "application/json" }
     )
     @Override
-    @Timed(percentiles = {0.5, 0.95, 0.99})
+    @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
     public ResponseEntity<List<UserEntity>> findAll() {
         List<UserEntity> users = new ArrayList<>();
         repository.findAll().forEach(users::add);
@@ -65,14 +65,14 @@ public class UserApiController implements UserApi {
     }
 
     @Override
-    @Timed(percentiles = {0.5, 0.95, 0.99})
+    @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
     public ResponseEntity<UserEntity> findUserById(Long userId) {
         Optional<UserEntity> u = repository.findById(userId);
         return ResponseEntity.of(u);
     }
 
     @Override
-    @Timed(percentiles = {0.5, 0.95, 0.99})
+    @Timed(percentiles = {0.5, 0.95, 0.99}, histogram = true)
     public ResponseEntity<Void> updateUser(Long userId, @Valid CreateUpdateUserRequest user) {
         UserEntity userEntity = user.toUserEntity().id(userId);
         repository.saveAndFlush(userEntity);

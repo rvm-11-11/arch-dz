@@ -89,8 +89,13 @@ sum(rate(nginx_ingress_controller_request_duration_seconds_count[5m]))
 sum(increase(nginx_ingress_controller_request_duration_seconds_count{status=~"5.+"}[5m]))
 ```
 
+```
+    kubectl scale deployment prom-kube-prometheus-stack-operator  --replicas=0
+    kubectl scale deployment prom-kube-prometheus-stack-operator   --replicas=1
 
-helm dependency update ./my-helm-app
+pod/nginx-ingress-nginx-controller-b88gg 
+```
+
 
 Cleanup:
 
@@ -119,5 +124,6 @@ https://likegeeks.com/bash-scripting-step-step-part2/
 https://httpd.apache.org/docs/2.4/programs/ab.html
 https://stackoverflow.com/questions/60634832/postman-launches-with-a-blank-screen
 
+MySQL Dashboard: https://grafana.com/grafana/dashboards/7362
 
 https://medium.com/bitnami-perspectives/monitoring-a-mariadb-server-using-prometheus-and-grafana-5ee3d1c5360e

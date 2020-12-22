@@ -83,8 +83,9 @@ mariadb:
   enabled: true
   metrics:
     enabled: true
-  serviceMonitor:
-    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: monitoring
   auth:
     rootPassword: secretpassword123
     database: my_db

@@ -16,3 +16,38 @@ https://github.com/izhigalko/otus-demo-istio
 
 Demo with Minikube:
 https://github.com/izhigalko/otus-demo-istio/tree/minikube
+
+Istio getting started:
+https://istio.io/latest/docs/setup/getting-started/
+
+istioctl full path:
+/home/superuser/Documents/OTUS/bin/istio-1.8.1/bin/istioctl
+
+/home/superuser/Documents/OTUS/bin/istio-1.8.1/bin/istioctl operator init --watchedNamespaces istio-system --operatorNamespace istio-operator
+
+Check Istio status -- FAILS, no resources :( 
+`kubectl get all -n istio-system -l istio.io/rev=default`
+
+but this works:
+`kubectl describe istiooperator.install.istio.io -n istio-system`
+
+Kiali is not installed properly:
+
+kubectl apply -f kiali/kiali.yaml
+Returns:
+```
+flag provided but not defined: -v
+Usage of /opt/kiali/kiali:
+  -config string
+        Path to the YAML configuration file. If not specified, environment variables will be used for configuration.
+```
+Trying default config of from Istio get started:
+
+```
+kubectl apply -f kiali/kiali-from-docs.yaml 
+/home/superuser/Documents/OTUS/bin/istio-1.8.1/bin/istioctl dashboard kiali
+```
+
+Seems to work...
+
+Stuck here, will try official Istio example

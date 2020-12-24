@@ -51,3 +51,34 @@ kubectl apply -f kiali/kiali-from-docs.yaml
 Seems to work...
 
 Stuck here, will try official Istio example
+
+## Official Istio way
+
+istioctl full path:
+```
+/home/superuser/Documents/OTUS/bin/istio-1.8.1/bin/istioctl
+```
+Script
+```
+/home/superuser/Documents/OTUS/bin/istio-1.8.1/bin/istioctl install --set profile=demo -y
+
+kubectl create namespace istio-test
+kubectl config set-context --current --namespace=istio-test
+kubectl label namespace istio-test istio-injection=enabled
+
+kubectl apply -f /home/superuser/Documents/OTUS/bin/istio-1.8.1/samples/bookinfo/platform/kube/bookinfo.yaml
+kubectl apply -f /home/superuser/Documents/OTUS/bin/istio-1.8.1/samples/bookinfo/networking/bookinfo-gateway.yaml
+
+/home/superuser/Documents/OTUS/bin/istio-1.8.1/bin/istioctl analyze
+
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].nodePort}')
+
+
+```
+http://192.168.49.2:32490/productpage
+
+```
+kubectl apply -f /home/superuser/Documents/OTUS/bin/istio-1.8.1/samples/addons
+/home/superuser/Documents/OTUS/bin/istio-1.8.1/bin/istioctl dashboard kiali
+```

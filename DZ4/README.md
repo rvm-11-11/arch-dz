@@ -82,3 +82,15 @@ http://192.168.49.2:32490/productpage
 kubectl apply -f /home/superuser/Documents/OTUS/bin/istio-1.8.1/samples/addons
 /home/superuser/Documents/OTUS/bin/istio-1.8.1/bin/istioctl dashboard kiali
 ```
+
+## My way
+
+```
+kubectl apply -f deployments.yaml 
+kubectl apply -f gateway.yaml 
+minikube service spring-v-app --url -n istio-test
+kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}'
+
+```
+http://192.168.49.2:32490/version -- go through Istio
+

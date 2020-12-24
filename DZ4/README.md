@@ -83,6 +83,13 @@ kubectl apply -f /home/superuser/Documents/OTUS/bin/istio-1.8.1/samples/addons
 /home/superuser/Documents/OTUS/bin/istio-1.8.1/bin/istioctl dashboard kiali
 ```
 
+Clean up:
+
+```
+kubectl delete -f /home/superuser/Documents/OTUS/bin/istio-1.8.1/samples/bookinfo/platform/kube/bookinfo.yaml
+kubectl delete -f /home/superuser/Documents/OTUS/bin/istio-1.8.1/samples/bookinfo/networking/bookinfo-gateway.yaml
+```
+
 ## My way
 
 ```
@@ -90,7 +97,10 @@ kubectl apply -f deployments.yaml
 kubectl apply -f gateway.yaml 
 minikube service spring-v-app --url -n istio-test
 kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}'
-
 ```
 http://192.168.49.2:32490/version -- go through Istio
+
+## Background
+
+https://istio.io/latest/docs/reference/config/networking/virtual-service/#HTTPRouteDestination
 

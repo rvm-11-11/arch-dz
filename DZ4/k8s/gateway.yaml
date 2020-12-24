@@ -41,10 +41,6 @@ spec:
         - uri:
             exact: /version
       route:
-#        - destination:
-#            host: spring-v-app
-#            port:
-#              number: 8080
         - destination:
             host: spring-v-app
             subset: v1

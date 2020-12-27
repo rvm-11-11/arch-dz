@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - args:
-        - --provider=github
+        - --provider=oidc
         - --email-domain=*
         - --upstream=file:///dev/null
         - --http-address=0.0.0.0:4180
@@ -24,15 +24,17 @@ spec:
         - --pass-authorization-header=true
         - --pass-access-token=true
         - --set-xauthrequest=true
+        - --oidc-issuer-url=https://keycloak.192.168.49.2.nip.io/auth/realms/myrealm
+        - --ssl-insecure-skip-verify=true
         env:
 #        - name: OAUTH2_PROXY_CLIENT_ID
 #          value: 4fcc15e1cbc8100cef72
 #        - name: OAUTH2_PROXY_CLIENT_SECRET
 #          value: a7ddb7d132328ffb35ecfe8e2f1eb80fa0f292f5
         - name: OAUTH2_PROXY_CLIENT_ID
-          value: cd370165a01ff3b73895
+          value: account
         - name: OAUTH2_PROXY_CLIENT_SECRET
-          value: c10a5f057db6fc13e37a2a77a53c88972fba2511
+          value: 48b14b3c-adb2-4f2a-9d23-bf44cb579bd1
         - name: OAUTH2_PROXY_COOKIE_SECRET
           value: 12312adfa342abas
         image: quay.io/pusher/oauth2_proxy:latest

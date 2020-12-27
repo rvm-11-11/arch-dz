@@ -92,5 +92,9 @@ https://oauth2-proxy.github.io/oauth2-proxy/
 
 ### Running OAuth2 proxy against local Keycloak
     
+    https://keycloak.192.168.49.2.nip.io/auth/realms/myrealm/.well-known/openid-configuration
+
+    
+    
     TODO
     

@@ -94,6 +94,13 @@ https://oauth2-proxy.github.io/oauth2-proxy/
     
     https://keycloak.192.168.49.2.nip.io/auth/realms/myrealm/.well-known/openid-configuration
 
+- how to do registration?
+  - without first/last name?
+  - or proxy call 
+- how to verify email automatically?
+    
+    https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_users_resource
+    https://www.appsdeveloperblog.com/keycloak-rest-api-create-a-new-user/
     
     
     TODO

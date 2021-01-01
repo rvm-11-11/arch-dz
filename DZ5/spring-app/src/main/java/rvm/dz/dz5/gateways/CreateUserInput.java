@@ -15,4 +15,6 @@ public class CreateUserInput {
 
     final String lastName;
 
+    final String password;
+
 }

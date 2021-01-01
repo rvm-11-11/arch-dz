@@ -23,6 +23,7 @@ public class RegistrationController {
                 .email(request.getEmail())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
+                .password(request.getPassword())
                 .build();
 
         return useCase.register(input).toResponseEntity();

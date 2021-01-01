@@ -26,6 +26,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -49,11 +50,19 @@ public class KeyCloakClient implements IdpClient {
 
     @Override
     public void registerUser(CreateUserInput createUserInput) {
+        Credential password = Credential.builder()
+                .temporary(false)
+                .type("password")
+                .value(createUserInput.getPassword())
+                .build();
         CreateUserRequest createUserRequest = CreateUserRequest.builder()
                 .email(createUserInput.getEmail())
                 .firstName(createUserInput.getFirstName())
                 .lastName(createUserInput.getLastName())
                 .username(createUserInput.getUsername())
+                .credentials(List.of(password))
+                .emailVerified(true)
+                .enabled(true)
                 .build();
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(getAccessToken());

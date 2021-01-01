@@ -17,4 +17,6 @@ public class RegistrationUseCaseInput {
 
     final String lastName;
 
+    final String password;
+
 }

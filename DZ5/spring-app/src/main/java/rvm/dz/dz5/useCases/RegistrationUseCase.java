@@ -19,6 +19,7 @@ public class RegistrationUseCase {
                 .email(input.email)
                 .firstName(input.firstName)
                 .lastName(input.lastName)
+                .password(input.password)
                 .build();
 
         idpClient.registerUser(createUserInput);

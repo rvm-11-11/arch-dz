@@ -102,6 +102,8 @@ https://oauth2-proxy.github.io/oauth2-proxy/
     https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_users_resource
     https://www.appsdeveloperblog.com/keycloak-rest-api-create-a-new-user/
     
+    https://stackoverflow.com/questions/4072585/disabling-ssl-certificate-validation-in-spring-resttemplate
     
+    https://stackoverflow.com/questions/9210514/unable-to-find-valid-certification-path-to-requested-target-error-even-after-c
     TODO
     

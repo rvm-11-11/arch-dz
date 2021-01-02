@@ -11,13 +11,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OkResponse implements UseCaseResponse{
 
-    public static final OkResponse EMPTY = new OkResponse();
+    public static final OkResponse EMPTY = new OkResponse(Optional.empty());
 
-//    private final Optional<String> body;
+    private final Optional<String> body;
 
     @Override
     public ResponseEntity toResponseEntity() {
-        return ResponseEntity.ok().build();
-//        return body.map(ResponseEntity::of);
+//        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(body);
     }
 }

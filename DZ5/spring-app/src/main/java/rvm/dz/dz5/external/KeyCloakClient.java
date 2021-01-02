@@ -1,13 +1,10 @@
 package rvm.dz.dz5.external;
 
-import lombok.RequiredArgsConstructor;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.apache.http.conn.ssl.TrustStrategy;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -19,13 +16,11 @@ import rvm.dz.dz5.gateways.CreateUserInput;
 import rvm.dz.dz5.gateways.IdpClient;
 
 import javax.net.ssl.SSLContext;
-import java.net.URI;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +30,7 @@ public class KeyCloakClient implements IdpClient {
     @Value("${keycloak.host}")
     private String host;
 
-    private final String createUserEndpoint = "/auth/admin/realms/myrealm/users";
+    private final String usersEndpoint = "/auth/admin/realms/myrealm/users";
     private final String getTokenEndpoint = "/auth/realms/master/protocol/openid-connect/token";
 
     private RestTemplate restTemplate = new RestTemplate();
@@ -49,7 +44,7 @@ public class KeyCloakClient implements IdpClient {
     }
 
     @Override
-    public void registerUser(CreateUserInput createUserInput) {
+    public String registerUser(CreateUserInput createUserInput) {
         Credential password = Credential.builder()
                 .temporary(false)
                 .type("password")
@@ -67,8 +62,31 @@ public class KeyCloakClient implements IdpClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(getAccessToken());
         HttpEntity<CreateUserRequest> createUserRequestHttpEntity = new HttpEntity<>(createUserRequest, headers);
-        restTemplate.exchange(host + createUserEndpoint, HttpMethod.POST,
+        restTemplate.exchange(host + usersEndpoint, HttpMethod.POST,
                 createUserRequestHttpEntity, String.class, Map.of());
+        return getUserIdByUsername(createUserInput.getUsername());
+    }
+
+    @Override
+    public GetUserInfoResponse getUserInfo(String userId) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(getAccessToken());
+        HttpEntity<CreateUserRequest> createUserRequestHttpEntity = new HttpEntity<>(null, headers);
+        GetUserInfoResponse user = restTemplate.exchange(host + usersEndpoint + "/" + userId,
+                HttpMethod.GET,
+                createUserRequestHttpEntity,
+                GetUserInfoResponse.class).getBody();
+        return user;
+    }
+
+    @Override
+    public void updateUserInfo(String userId, UpdateUserRequest updateUserRequest) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(getAccessToken());
+        HttpEntity<UpdateUserRequest> updateUserRequestHttpEntity = new HttpEntity<>(updateUserRequest, headers);
+        restTemplate.exchange(host + usersEndpoint + "/" + userId, HttpMethod.PUT,
+                updateUserRequestHttpEntity, String.class, Map.of());
+//        return getUserIdByUsername(createUserInput.getUsername());
     }
 
     private String getAccessToken() {
@@ -109,6 +127,15 @@ public class KeyCloakClient implements IdpClient {
         requestFactory.setHttpClient(httpClient);
         RestTemplate restTemplate = new RestTemplate(requestFactory);
         return restTemplate;
+    }
+
+    private String getUserIdByUsername(String username) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(getAccessToken());
+        HttpEntity<CreateUserRequest> createUserRequestHttpEntity = new HttpEntity<>(null, headers);
+        GetUserInfoResponse[] users = restTemplate.exchange(host + usersEndpoint, HttpMethod.GET,
+                createUserRequestHttpEntity, GetUserInfoResponse[].class, Map.of("username", username)).getBody();
+        return users[0].getId();
     }
 
 }

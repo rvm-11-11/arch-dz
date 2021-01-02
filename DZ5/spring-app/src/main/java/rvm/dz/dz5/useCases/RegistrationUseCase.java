@@ -7,6 +7,8 @@ import rvm.dz.dz5.gateways.IdpClient;
 import rvm.dz.dz5.responses.OkResponse;
 import rvm.dz.dz5.responses.UseCaseResponse;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class RegistrationUseCase {
@@ -22,8 +24,8 @@ public class RegistrationUseCase {
                 .password(input.password)
                 .build();
 
-        idpClient.registerUser(createUserInput);
+        String userId = idpClient.registerUser(createUserInput);
 
-        return OkResponse.EMPTY;
+        return new OkResponse(Optional.of(userId));
     }
 }

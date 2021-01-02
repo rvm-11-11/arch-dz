@@ -104,6 +104,37 @@ https://oauth2-proxy.github.io/oauth2-proxy/
     
     https://stackoverflow.com/questions/4072585/disabling-ssl-certificate-validation-in-spring-resttemplate
     
-    https://stackoverflow.com/questions/9210514/unable-to-find-valid-certification-path-to-requested-target-error-even-after-c
+    https://stackoverflow.com/questions/9210514/unable-to-find-valid-certification578/-path-to-requested-target-error-even-after-c
     TODO
     
+### Running OAuth2 proxy against local Keycloak and own app
+
+```
+kubectl config set-context --current --namespace=auth-test
+
+helm create dz5-chart
+helm install dz5-chart ./dz5-chart
+```
+http://192.168.49.2:30010/health
+
+What should be keycloak host then?
+
+```
+kubectl exec --stdin --tty dz5-chart-6f848c676b-n2nxv  -- /bin/bash
+```
+
+Not clear if this URL is reachable:
+http://keycloak/auth/realms/myrealm/.well-known/openid-configuration
+
+http://arch.homework/otusapp/romanov/health
+^already goes through auth proxy
+
+Valid Redirect URIs -- changed to `*`
+
+Copied over client secret for account
+
+### Cleanup:
+
+```
+helm uninstall dz5-chart
+```

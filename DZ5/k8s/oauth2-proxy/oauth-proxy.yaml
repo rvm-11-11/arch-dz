@@ -34,7 +34,7 @@ spec:
         - name: OAUTH2_PROXY_CLIENT_ID
           value: account
         - name: OAUTH2_PROXY_CLIENT_SECRET
-          value: 48b14b3c-adb2-4f2a-9d23-bf44cb579bd1
+          value: d2878155-56a5-434d-8f58-343e1963eea0
         - name: OAUTH2_PROXY_COOKIE_SECRET
           value: 12312adfa342abas
         image: quay.io/pusher/oauth2_proxy:latest

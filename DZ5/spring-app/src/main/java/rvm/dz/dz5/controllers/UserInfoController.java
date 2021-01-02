@@ -1,6 +1,7 @@
 package rvm.dz.dz5.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +15,14 @@ import rvm.dz.dz5.useCases.RegistrationUseCaseInput;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class UserInfoController {
 
     private final IdpClient idpClient;
 
     @GetMapping("/getUserInfo")
-    public ResponseEntity getUserInfo(@RequestHeader("X-UserId") String userId) {
+    public ResponseEntity getUserInfo(@RequestHeader("X-Auth-Request-User") String userId) {
+        log.info("/getUserInfo: {}", userId);
 
         if (userId == null || userId.isEmpty()) {
             return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);
@@ -30,8 +33,9 @@ public class UserInfoController {
     }
 
     @PutMapping("/updateUserInfo")
-    public ResponseEntity updateUserInfo(@RequestHeader("X-UserId") String userId,
+    public ResponseEntity updateUserInfo(@RequestHeader("X-Auth-Request-User") String userId,
                                          @RequestBody UpdateUserRequest updateUserRequest) {
+        log.info("/updateUserInfo: {}, {}", userId, updateUserRequest);
 
         if (userId == null || userId.isEmpty()) {
             return new ResponseEntity<>("UNAUTHORIZED", HttpStatus.UNAUTHORIZED);

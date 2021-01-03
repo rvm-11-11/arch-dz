@@ -133,6 +133,15 @@ Valid Redirect URIs -- changed to `*`
 
 Copied over client secret for account
 
+```
+kubectl exec pod/ingress-nginx-controller-799c9469f7-zmflx -n kube-system -- cat /etc/nginx/nginx.conf > nginx.conf
+
+```
+
+https://stackoverflow.com/questions/62438259/kubernetes-nginx-ingress-disable-external-auth-for-specific-path
+
+
+
 ### Cleanup:
 
 ```

@@ -115,12 +115,12 @@ kubectl config set-context --current --namespace=auth-test
 helm create dz5-chart
 helm install dz5-chart ./dz5-chart
 ```
-http://192.168.49.2:30010/health
+http://192.168.49.2:31670/health
 
 What should be keycloak host then?
 
 ```
-kubectl exec --stdin --tty dz5-chart-6f848c676b-n2nxv  -- /bin/bash
+kubectl exec --stdin --tty pod/dz5-chart-6f848c676b-cmshj  -- /bin/bash
 ```
 
 Not clear if this URL is reachable:

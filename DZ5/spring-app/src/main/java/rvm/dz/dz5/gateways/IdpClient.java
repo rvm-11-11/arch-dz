@@ -6,7 +6,7 @@ import rvm.dz.dz5.external.UpdateUserRequest;
 
 public interface IdpClient {
 
-    String registerUser(CreateUserInput createUserInput);
+    void registerUser(CreateUserInput createUserInput);
 
     GetUserInfoResponse getUserInfo(String userId);
 

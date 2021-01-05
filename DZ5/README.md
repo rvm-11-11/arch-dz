@@ -140,7 +140,25 @@ kubectl exec pod/ingress-nginx-controller-799c9469f7-zmflx -n kube-system -- cat
 
 https://stackoverflow.com/questions/62438259/kubernetes-nginx-ingress-disable-external-auth-for-specific-path
 
+https://learning.postman.com/docs/writing-scripts/script-references/variables-list/
 
+http://arch.homework/otusapp/romanov/getUserInfo
+
+https://www.keycloak.org/docs/latest/server_admin/#_authentication-flows
+
+Enabled direct grant -- does not really help
+https://developer.okta.com/blog/2018/06/29/what-is-the-oauth2-password-grant
+
+
+    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth-test.svc.cluster.local:4180/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+
+http://arch.homework/otusapp/romanov/oauth2/auth
+    
+    kubectl logs service/oauth2-proxy 
+    kubectl logs pod/ingress-nginx-controller-799c9469f7-zmflx -n=kube-system
+
+`--cookie-secure=false` -- helped
 
 ### Cleanup:
 

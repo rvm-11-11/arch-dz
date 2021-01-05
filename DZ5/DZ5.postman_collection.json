@@ -1,0 +1,1055 @@
+{
+	"info": {
+		"_postman_id": "8f41607d-06b5-4046-8ba9-4fb441e9d56f",
+		"name": "DZ5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Keycloak",
+			"item": [
+				{
+					"name": "Keycloak OIDC",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://keycloak.192.168.49.2.nip.io/auth/realms/myrealm/.well-known/openid-configuration",
+							"protocol": "http",
+							"host": [
+								"keycloak",
+								"192",
+								"168",
+								"49",
+								"2",
+								"nip",
+								"io"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"myrealm",
+								".well-known",
+								"openid-configuration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Keycloak no SSL",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://192.168.49.2:31418/auth/realms/myrealm/.well-known/openid-configuration",
+							"protocol": "http",
+							"host": [
+								"192",
+								"168",
+								"49",
+								"2"
+							],
+							"port": "31418",
+							"path": [
+								"auth",
+								"realms",
+								"myrealm",
+								".well-known",
+								"openid-configuration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Keycloak: get all users",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{keycloak-access-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://keycloak.192.168.49.2.nip.io/auth/admin/realms/myrealm/users",
+							"protocol": "https",
+							"host": [
+								"keycloak",
+								"192",
+								"168",
+								"49",
+								"2",
+								"nip",
+								"io"
+							],
+							"path": [
+								"auth",
+								"admin",
+								"realms",
+								"myrealm",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Keycloak: get user by name",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{keycloak-access-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://keycloak.192.168.49.2.nip.io/auth/admin/realms/myrealm/users?username=user1",
+							"protocol": "https",
+							"host": [
+								"keycloak",
+								"192",
+								"168",
+								"49",
+								"2",
+								"nip",
+								"io"
+							],
+							"path": [
+								"auth",
+								"admin",
+								"realms",
+								"myrealm",
+								"users"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "user1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Keycloak: add user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{keycloak-access-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"firstName1\",\n    \"lastName\": \"lastName1\",\n    \"email\": \"test@example.com\",\n    \"enabled\": \"true\",\n    \"username\": \"dummy2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://keycloak.192.168.49.2.nip.io/auth/admin/realms/myrealm/users",
+							"protocol": "https",
+							"host": [
+								"keycloak",
+								"192",
+								"168",
+								"49",
+								"2",
+								"nip",
+								"io"
+							],
+							"path": [
+								"auth",
+								"admin",
+								"realms",
+								"myrealm",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Keycloak: update user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{keycloak-access-token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"firstName111\",\n    \"lastName\": \"lastName1\",\n    \"email\": \"test@example223.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://keycloak.192.168.49.2.nip.io/auth/admin/realms/myrealm/users/7611b007-3242-438f-99f3-17c56b729971",
+							"protocol": "https",
+							"host": [
+								"keycloak",
+								"192",
+								"168",
+								"49",
+								"2",
+								"nip",
+								"io"
+							],
+							"path": [
+								"auth",
+								"admin",
+								"realms",
+								"myrealm",
+								"users",
+								"7611b007-3242-438f-99f3-17c56b729971"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Keycloak: get token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "admin-cli",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://keycloak.192.168.49.2.nip.io/auth/realms/master/protocol/openid-connect/token",
+							"protocol": "https",
+							"host": [
+								"keycloak",
+								"192",
+								"168",
+								"49",
+								"2",
+								"nip",
+								"io"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"master",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-UserId",
+								"type": "text",
+								"value": "7611b007-3242-438f-99f3-17c56b729971"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "My app",
+			"item": [
+				{
+					"name": "1 Register User1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// var jsonData = pm.response.json();",
+									"",
+									"// pm.test(\"Your test name\", function () {",
+									"//     pm.expect(jsonData.userId.length).to.eql(36);",
+									"// });",
+									"",
+									"// pm.globals.set(\"user1_userId\", jsonData.userId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"user1_username\", pm.variables.replaceIn('{{$randomUserName}}'));",
+									"pm.globals.set(\"user1_firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+									"pm.globals.set(\"user1_lastName\", pm.variables.replaceIn('{{$randomLastName}}'));",
+									"pm.globals.set(\"user1_email\", pm.variables.replaceIn('{{$randomExampleEmail}}'));",
+									"pm.globals.set(\"user1_password\", pm.variables.replaceIn('{{$randomPassword}}'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{user1_username}}\",\n    \"firstName\": \"{{user1_firstName}}\",\n    \"lastName\": \"{{user1_lastName}}\",\n    \"email\": \"{{user1_email}}\",\n    \"password\": \"{{user1_password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.1 Trying to get user info (not logged in)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is html, not json\", function () {",
+									"     pm.response.to.be.header(\"Content-Type\", \"text/html;charset=utf-8\");",
+									"});",
+									"",
+									"pm.test(\"Page contains login form\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Sign in to your account\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/getUserInfo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"getUserInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.2 Trying to update user info (not logged in)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is html, not json\", function () {",
+									"     pm.response.to.be.header(\"Content-Type\", \"text/html;charset=utf-8\");",
+									"});",
+									"",
+									"pm.test(\"Page contains login form\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Sign in to your account\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"{{user1_firstName}}_new\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/updateUserInfo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"updateUserInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.1 Login Step 1 (User 1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is html, not json\", function () {",
+									"     pm.response.to.be.header(\"Content-Type\", \"text/html;charset=utf-8\");",
+									"});",
+									"",
+									"pm.test(\"Page contains login form\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Sign in to your account\");",
+									"});",
+									"",
+									"const $ = cheerio.load(responseBody);",
+									"",
+									"console.log($('#kc-form-login').attr('action'));",
+									"var loginUrl =  $('#kc-form-login').attr('action');",
+									"console.log(loginUrl);",
+									"pm.globals.set(\"keycloak_loginUrl\", loginUrl);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/getUserInfo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"getUserInfo"
+							]
+						},
+						"description": "Calling some protected page which forwards to auth form which we need to submit in next step"
+					},
+					"response": []
+				},
+				{
+					"name": "3.2 Login Step 2 (User 1)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{user1_username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{user1_password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak_loginUrl}}",
+							"host": [
+								"{{keycloak_loginUrl}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4 Get User Info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User info has expected values\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql(pm.variables.get(\"user1_username\").toLowerCase());",
+									"    pm.expect(jsonData.firstName).to.eql(pm.variables.get(\"user1_firstName\"));",
+									"    pm.expect(jsonData.lastName).to.eql(pm.variables.get(\"user1_lastName\"));",
+									"    pm.expect(jsonData.email).to.eql(pm.variables.get(\"user1_email\").toLowerCase());",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/getUserInfo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"getUserInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.1 Update User Info User1",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"{{user1_firstName}}_new\",\n    \"lastName\": \"{{user1_lastName}}_new\",\n    \"email\": \"{{user1_email}}_new\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/updateUserInfo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"updateUserInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.2 Check user updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User info has expected values\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql(pm.variables.get(\"user1_username\").toLowerCase());",
+									"    pm.expect(jsonData.firstName).to.eql(pm.variables.get(\"user1_firstName\") + \"_new\");",
+									"    pm.expect(jsonData.lastName).to.eql(pm.variables.get(\"user1_lastName\") + \"_new\");",
+									"    pm.expect(jsonData.email).to.eql(pm.variables.get(\"user1_email\").toLowerCase() + \"_new\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/getUserInfo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"getUserInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6.1 Logout User1 Step1",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const jar = pm.cookies.jar();",
+									"",
+									"jar.clear(pm.request.url, function (error) {",
+									"  // error - <Error>",
+									"});",
+									"",
+									"jar.clear(\"http://arch.homework/\", function (error) {",
+									"  // error - <Error>",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://keycloak.192.168.49.2.nip.io/auth/realms/myrealm/protocol/openid-connect/logout",
+							"protocol": "https",
+							"host": [
+								"keycloak",
+								"192",
+								"168",
+								"49",
+								"2",
+								"nip",
+								"io"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"myrealm",
+								"protocol",
+								"openid-connect",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6.2 Logout User1 Step2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://arch.homework/oauth2/sign_out",
+							"protocol": "https",
+							"host": [
+								"arch",
+								"homework"
+							],
+							"path": [
+								"oauth2",
+								"sign_out"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7 Register User2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"user2_username\", pm.variables.replaceIn('{{$randomUserName}}'));",
+									"pm.globals.set(\"user2_firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));",
+									"pm.globals.set(\"user2_lastName\", pm.variables.replaceIn('{{$randomLastName}}'));",
+									"pm.globals.set(\"user2_email\", pm.variables.replaceIn('{{$randomExampleEmail}}'));",
+									"pm.globals.set(\"user2_password\", pm.variables.replaceIn('{{$randomPassword}}'));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// var jsonData = pm.response.json();",
+									"",
+									"// pm.test(\"Your test name\", function () {",
+									"//     pm.expect(jsonData.userId.length).to.eql(36);",
+									"// });",
+									"",
+									"// pm.globals.set(\"user2_userId\", jsonData.userId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{user2_username}}\",\n    \"firstName\": \"{{user2_firstName}}\",\n    \"lastName\": \"{{user2_lastName}}\",\n    \"email\": \"{{user2_email}}\",\n    \"password\": \"{{user2_password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8.1 Login Step 1 (User 2)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is html, not json\", function () {",
+									"     pm.response.to.be.header(\"Content-Type\", \"text/html;charset=utf-8\");",
+									"});",
+									"",
+									"pm.test(\"Page contains login form\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Sign in to your account\");",
+									"});",
+									"",
+									"const $ = cheerio.load(responseBody);",
+									"",
+									"console.log($('#kc-form-login').attr('action'));",
+									"var loginUrl =  $('#kc-form-login').attr('action');",
+									"console.log(loginUrl);",
+									"pm.globals.set(\"keycloak_loginUrl\", loginUrl);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/getUserInfo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"getUserInfo"
+							]
+						},
+						"description": "Calling some protected page which forwards to auth form which we need to submit in next step"
+					},
+					"response": []
+				},
+				{
+					"name": "8.2 Login Step 2 (User 2)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{user2_username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{user2_password}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{keycloak_loginUrl}}",
+							"host": [
+								"{{keycloak_loginUrl}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "9 Check it is User2 info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User info has expected values\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql(pm.variables.get(\"user2_username\").toLowerCase());",
+									"    pm.expect(jsonData.firstName).to.eql(pm.variables.get(\"user2_firstName\"));",
+									"    pm.expect(jsonData.lastName).to.eql(pm.variables.get(\"user2_lastName\"));",
+									"    pm.expect(jsonData.email).to.eql(pm.variables.get(\"user2_email\").toLowerCase());",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/getUserInfo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"getUserInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10.1 Update User Info User2",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"{{user2_firstName}}_new\",\n    \"lastName\": \"{{user2_lastName}}_new\",\n    \"email\": \"{{user2_email}}_new\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/updateUserInfo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"updateUserInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10.2 Check User2 updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User info has expected values\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.username).to.eql(pm.variables.get(\"user2_username\").toLowerCase());",
+									"    pm.expect(jsonData.firstName).to.eql(pm.variables.get(\"user2_firstName\") + \"_new\");",
+									"    pm.expect(jsonData.lastName).to.eql(pm.variables.get(\"user2_lastName\") + \"_new\");",
+									"    pm.expect(jsonData.email).to.eql(pm.variables.get(\"user2_email\").toLowerCase() + \"_new\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/getUserInfo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"getUserInfo"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

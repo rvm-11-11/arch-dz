@@ -26,6 +26,7 @@ spec:
         - --set-xauthrequest=true
         - --oidc-issuer-url=https://keycloak.192.168.49.2.nip.io/auth/realms/myrealm
         - --ssl-insecure-skip-verify=true
+        - --cookie-secure=false
         env:
 #        - name: OAUTH2_PROXY_CLIENT_ID
 #          value: 4fcc15e1cbc8100cef72
@@ -34,7 +35,7 @@ spec:
         - name: OAUTH2_PROXY_CLIENT_ID
           value: account
         - name: OAUTH2_PROXY_CLIENT_SECRET
-          value: 68a7e610-3810-4cae-a2ad-66c401f8bdd7
+          value: 7e235efa-947b-4735-9f6b-12f2fb7cfbce
         - name: OAUTH2_PROXY_COOKIE_SECRET
           value: 12312adfa342abas
         image: quay.io/pusher/oauth2_proxy:latest

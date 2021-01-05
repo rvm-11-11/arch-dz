@@ -44,7 +44,7 @@ public class KeyCloakClient implements IdpClient {
     }
 
     @Override
-    public String registerUser(CreateUserInput createUserInput) {
+    public void registerUser(CreateUserInput createUserInput) {
         Credential password = Credential.builder()
                 .temporary(false)
                 .type("password")
@@ -64,7 +64,7 @@ public class KeyCloakClient implements IdpClient {
         HttpEntity<CreateUserRequest> createUserRequestHttpEntity = new HttpEntity<>(createUserRequest, headers);
         restTemplate.exchange(host + usersEndpoint, HttpMethod.POST,
                 createUserRequestHttpEntity, String.class, Map.of());
-        return getUserIdByUsername(createUserInput.getUsername());
+//        return getUserIdByUsername(createUserInput.getUsername());
     }
 
     @Override
@@ -86,7 +86,6 @@ public class KeyCloakClient implements IdpClient {
         HttpEntity<UpdateUserRequest> updateUserRequestHttpEntity = new HttpEntity<>(updateUserRequest, headers);
         restTemplate.exchange(host + usersEndpoint + "/" + userId, HttpMethod.PUT,
                 updateUserRequestHttpEntity, String.class, Map.of());
-//        return getUserIdByUsername(createUserInput.getUsername());
     }
 
     private String getAccessToken() {
@@ -94,7 +93,6 @@ public class KeyCloakClient implements IdpClient {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-//        headers.add("PRIVATE-TOKEN", "xyz");
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("grant_type","password");
@@ -129,13 +127,14 @@ public class KeyCloakClient implements IdpClient {
         return restTemplate;
     }
 
-    private String getUserIdByUsername(String username) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(getAccessToken());
-        HttpEntity<CreateUserRequest> createUserRequestHttpEntity = new HttpEntity<>(null, headers);
-        GetUserInfoResponse[] users = restTemplate.exchange(host + usersEndpoint, HttpMethod.GET,
-                createUserRequestHttpEntity, GetUserInfoResponse[].class, Map.of("username", username)).getBody();
-        return users[0].getId();
-    }
+// Somehow this method is buggy and not really necessary
+//    private String getUserIdByUsername(String username) {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setBearerAuth(getAccessToken());
+//        HttpEntity<CreateUserRequest> createUserRequestHttpEntity = new HttpEntity<>(null, headers);
+//        GetUserInfoResponse[] users = restTemplate.exchange(host + usersEndpoint, HttpMethod.GET,
+//                createUserRequestHttpEntity, GetUserInfoResponse[].class, Map.of("username", username)).getBody();
+//        return users[0].getId();
+//    }
 
 }

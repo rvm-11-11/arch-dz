@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dz5-keycloak-init
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: check-keycloak-ready
+          image: dwdraju/alpine-curl-jq
+          command:
+            - sh
+            - "-c"
+            - |
+              until $(curl --output /dev/null --silent --head --fail http://dz5-chart-keycloak/auth/realms/master); do
+              printf '.'
+              sleep 5
+              done
+      containers:
+        - name: dz5-keycloak-init
+          image: dwdraju/alpine-curl-jq
+          command:
+            - sh
+            - "-c"
+            - |
+              export ACCESS_TOKEN=$(\
+                  curl --location --request POST 'http://dz5-chart-keycloak/auth/realms/master/protocol/openid-connect/token' \
+                  --header 'Content-Type: application/x-www-form-urlencoded' \
+                  --data-urlencode 'grant_type=password' \
+                  --data-urlencode 'client_id=admin-cli' \
+                  --data-urlencode 'username=admin' \
+                  --data-urlencode 'password=admin' \
+                  --insecure \
+                  | jq -r '.access_token'\
+              )
+
+              export REALM_JSON=$(curl https://raw.githubusercontent.com/rvm-11-11/arch-dz/DZ5/DZ5/realm-export.json)
+
+              curl --location --request POST 'http://dz5-chart-keycloak/auth/admin/realms/' \
+              --header 'Authorization: Bearer '"$ACCESS_TOKEN" \
+              --header 'Content-Type: application/json' \
+              --data-raw "$REALM_JSON"
+      restartPolicy: Never
+  backoffLimit: 4

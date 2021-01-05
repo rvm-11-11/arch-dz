@@ -90,3 +90,11 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+keycloak:
+  enabled: true
+  auth:
+    adminUser: admin
+    adminPassword: admin
+#  ingress:
+#    enabled: true

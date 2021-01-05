@@ -160,8 +160,53 @@ http://arch.homework/otusapp/romanov/oauth2/auth
 
 `--cookie-secure=false` -- helped
 
+Postman test suit created
+
+### Wrap everything into Helm chart:
+
+https://artifacthub.io/packages/helm/bitnami/keycloak
+
+helm dependency update ./dz5-chart
+
+https://www.keycloak.org/docs-api/5.0/rest-api/index.html#_realms_admin_resource
+
+https://stackoverflow.com/questions/1955505/parsing-json-with-unix-tools
+
+
+    until $(curl --output /dev/null --silent --head --fail http://dz5-chart-keycloak/auth/realms/master); do
+        printf '.'
+        sleep 5
+    done
+    
+    export ACCESS_TOKEN=$(\
+        curl --location --request POST 'http://arch.homework/auth/realms/master/protocol/openid-connect/token' \
+        --header 'Content-Type: application/x-www-form-urlencoded' \
+        --data-urlencode 'grant_type=password' \
+        --data-urlencode 'client_id=admin-cli' \
+        --data-urlencode 'username=admin' \
+        --data-urlencode 'password=admin' \
+        --insecure \
+        | jq -r '.access_token'\
+    )
+    
+    export REALM_JSON=$(curl https://raw.githubusercontent.com/rvm-11-11/arch-dz/DZ5/DZ5/realm-export.json)
+    
+    curl --location --request POST 'http://192.168.49.2:30325/auth/admin/realms/' \
+    --header 'Authorization: Bearer '"$ACCESS_TOKEN" \
+    --header 'Content-Type: application/json' \
+    --data-raw ''"$REALM_JSON"''
+
+    curl --location --request POST 'http://example.com/' \
+    --header 'Authorization: Bearer $(ACCESS_TOKEN)' \
+    --header 'Content-Type: application/json' \
+    --data-raw '($REALM_JSON)'
+
+
+    kubectl exec --stdin --tty dz5-keycloak-init-r8j8t  -- /bin/bash
+
 ### Cleanup:
 
 ```
 helm uninstall dz5-chart
+kubectl delete all --all -n=auth-test
 ```

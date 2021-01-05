@@ -14,6 +14,17 @@ spec:
       labels:
         k8s-app: oauth2-proxy
     spec:
+      initContainers:
+        - name: check-keycloak-ready
+          image: dwdraju/alpine-curl-jq
+          command:
+            - sh
+            - "-c"
+            - |
+              until $(curl --output /dev/null --silent --head --fail http://dz5-chart-keycloak/auth/realms/master); do
+              printf '.'
+              sleep 5
+              done
       containers:
       - args:
         - --provider=oidc
@@ -24,9 +35,12 @@ spec:
         - --pass-authorization-header=true
         - --pass-access-token=true
         - --set-xauthrequest=true
-        - --oidc-issuer-url=https://arch.homework/auth/realms/myrealm
+        - --oidc-issuer-url=http://dz5-chart-keycloak/auth/realms/myrealm
         - --ssl-insecure-skip-verify=true
+        - --insecure-oidc-skip-issuer-verification=true
         - --cookie-secure=false
+        - --login-url=http://arch.homework/auth/realms/myrealm/protocol/openid-connect/auth
+        - --redeem-url=http://dz5-chart-keycloak/auth/realms/myrealm/protocol/openid-connect/token
         env:
 #        - name: OAUTH2_PROXY_CLIENT_ID
 #          value: 4fcc15e1cbc8100cef72
@@ -35,7 +49,7 @@ spec:
         - name: OAUTH2_PROXY_CLIENT_ID
           value: account
         - name: OAUTH2_PROXY_CLIENT_SECRET
-          value: 7e235efa-947b-4735-9f6b-12f2fb7cfbce
+          value: TOP_SECRET
         - name: OAUTH2_PROXY_COOKIE_SECRET
           value: 12312adfa342abas
         image: quay.io/pusher/oauth2_proxy:latest

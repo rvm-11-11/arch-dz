@@ -111,7 +111,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "**********",
+      "secret": "TOP_SECRET",
       "defaultRoles": [
         "view-profile",
         "manage-account"

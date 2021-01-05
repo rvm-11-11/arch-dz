@@ -203,7 +203,11 @@ https://stackoverflow.com/questions/1955505/parsing-json-with-unix-tools
 
 
     kubectl exec --stdin --tty dz5-keycloak-init-r8j8t  -- /bin/bash
+    kubectl exec --stdin --tty oauth2-proxy-59d88657f6-r4mlr    -- /bin/bash
 
+    dz5-chart-keycloak.192.168.49.2.nip.io 
+    
+    
 ### Cleanup:
 
 ```

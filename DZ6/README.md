@@ -36,3 +36,63 @@ https://docs.spring.io/spring-kafka/reference/html/#even-quicker-with-spring-boo
 
 Could not expose Kafka from k8s, so had to install it locally like this:
 https://kafka.apache.org/quickstart
+
+Seems to work!
+
+### Implementation
+
+#### Users service
+
+/register
+
+    POST request: email, name 
+    Response: userId
+    Publishes: USER_CREATED -- userId
+    
+/getUserInfo
+
+    GET: userId
+    Response: userName
+    Can be used to send email
+
+#### Billing service
+
+/createAccount
+
+    Subscribed to USER_CREATED event
+    Creates account with userId and balance zero
+
+/myBalance
+
+    GET
+    Request: userId
+    Returns: how much money is here
+
+/deposit
+
+    POST request: userId, sum
+
+/payment
+
+    Request: userId, sum
+    Subscribed to ORDER_CREATED event
+    Publishes: ORDER_PROCESSED -- result: paid/not enough money
+
+#### Orders service
+
+/createOrder
+
+    POST itemId, userId
+    Publishes: ORDER_CREATED -- itemId, userId, sum
+
+#### Notifications service
+
+/getAllSentMessages
+
+    GET
+    Response: all sent messages
+
+/sendEmail
+
+    Subscribed to ORDER_PROCESSED
+    Action: save to DB email with result

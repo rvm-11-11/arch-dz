@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        k8s-app: oauth2-proxy
+    spec:
+      containers:
+      - args:
+        - --provider=oidc
+        - --email-domain=*
+        - --upstream=file:///dev/null
+        - --http-address=0.0.0.0:4180
+        - --cookie-name=s
+        - --pass-authorization-header=true
+        - --pass-access-token=true
+        - --set-xauthrequest=true
+        - --oidc-issuer-url=https://arch.homework/auth/realms/myrealm
+        - --ssl-insecure-skip-verify=true
+        - --cookie-secure=false
+        env:
+#        - name: OAUTH2_PROXY_CLIENT_ID
+#          value: 4fcc15e1cbc8100cef72
+#        - name: OAUTH2_PROXY_CLIENT_SECRET
+#          value: a7ddb7d132328ffb35ecfe8e2f1eb80fa0f292f5
+        - name: OAUTH2_PROXY_CLIENT_ID
+          value: account
+        - name: OAUTH2_PROXY_CLIENT_SECRET
+          value: 7e235efa-947b-4735-9f6b-12f2fb7cfbce
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          value: 12312adfa342abas
+        image: quay.io/pusher/oauth2_proxy:latest
+        imagePullPolicy: Always
+        name: oauth2-proxy
+        ports:
+        - containerPort: 4180
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
+spec:
+  ports:
+  - name: http
+    port: 4180
+    protocol: TCP
+    targetPort: 4180
+  selector:
+    k8s-app: oauth2-proxy

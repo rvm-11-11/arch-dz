@@ -37,6 +37,8 @@ https://docs.spring.io/spring-kafka/reference/html/#even-quicker-with-spring-boo
 Could not expose Kafka from k8s, so had to install it locally like this:
 https://kafka.apache.org/quickstart
 
+    bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic orderProcessed
+
 Seems to work!
 
 ### Implementation

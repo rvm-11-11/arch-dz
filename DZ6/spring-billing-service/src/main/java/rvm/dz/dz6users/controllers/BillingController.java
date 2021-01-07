@@ -49,17 +49,20 @@ public class BillingController {
         OrderCreatedEvent incomingEvent = objectMapper.readValue((String) cr.value(), OrderCreatedEvent.class);
 
         AccountEntity account = repository.findByUserId(incomingEvent.userId).get();
+        OrderProcessedEvent.Status status;
         if(account.getBalance() >= incomingEvent.getSum()) {
             account.setBalance(account.getBalance() - incomingEvent.getSum());
             repository.save(account);
-            OrderProcessedEvent outcomingEvent =
-                    new OrderProcessedEvent(OrderProcessedEvent.Status.PAYMENT_ACCEPTED, incomingEvent.getOrderId());
-            this.template.send( "orderProcessed", objectMapper.writeValueAsString(outcomingEvent));
+            status = OrderProcessedEvent.Status.PAYMENT_ACCEPTED;
         } else {
-            OrderProcessedEvent outcomingEvent =
-                    new OrderProcessedEvent(OrderProcessedEvent.Status.PAYMENT_REJECTED, incomingEvent.getOrderId());
-            this.template.send( "orderProcessed", objectMapper.writeValueAsString(outcomingEvent));
+            status = OrderProcessedEvent.Status.PAYMENT_REJECTED;
         }
+
+        OrderProcessedEvent outgoingEvent = OrderProcessedEvent.builder()
+                .status(status)
+                .orderId(incomingEvent.orderId)
+                .userId(incomingEvent.userId).build();
+        this.template.send( "orderProcessed", objectMapper.writeValueAsString(outgoingEvent));
 
         return ResponseEntity.ok().build();
     }

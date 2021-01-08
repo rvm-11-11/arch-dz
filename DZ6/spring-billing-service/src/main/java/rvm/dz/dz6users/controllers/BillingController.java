@@ -29,6 +29,13 @@ public class BillingController {
         return ResponseEntity.ok(repository.findAll());
     }
 
+    @GetMapping("/account")
+    public ResponseEntity getAccountByUserId(@RequestParam Long userId) {
+        AccountEntity account = repository.findByUserId(userId).get();
+
+        return ResponseEntity.ok(account);
+    }
+
     @PostMapping("/deposit")
     public ResponseEntity deposit(@RequestBody DepositRequest request) {
         AccountEntity account = repository.findByUserId(request.userId).get();

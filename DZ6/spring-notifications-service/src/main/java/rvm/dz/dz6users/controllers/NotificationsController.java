@@ -29,6 +29,13 @@ public class NotificationsController {
         return ResponseEntity.ok(repository.findAll());
     }
 
+    @GetMapping("/notification")
+    public ResponseEntity getNotificationByOrderId(@RequestParam Long orderId) {
+        NotificationEntity notification = repository.findByOrderId(orderId).get();
+
+        return ResponseEntity.ok(notification);
+    }
+
     @KafkaListener(topics = "orderProcessed")
     public void listenOrderProcessed(ConsumerRecord<?, ?> cr) throws Exception {
         OrderProcessedEvent event = objectMapper.readValue((String) cr.value(), OrderProcessedEvent.class);

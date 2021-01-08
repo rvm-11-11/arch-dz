@@ -130,3 +130,7 @@ cd ..
 ```
 kubectl exec --stdin --tty pod/rvm-dz6-notifications-deployment-8454c87b79-zwb6c  -- /bin/bash
 ```
+
+```
+newman run DZ6.postman_collection.json --environment=local-k8s-ingress.postman_environment.json  --folder "k8s ingress"
+```

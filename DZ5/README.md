@@ -207,6 +207,7 @@ https://stackoverflow.com/questions/1955505/parsing-json-with-unix-tools
 
     dz5-chart-keycloak.192.168.49.2.nip.io 
     
+    newman run DZ5.postman_collection.json --environment=local-k8s-ingress.postman_environment.json  --folder "My app" --insecure
     
 ### Cleanup:
 

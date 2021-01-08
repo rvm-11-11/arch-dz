@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import rvm.dz.dz6users.repositories.AccountEntity;
 import rvm.dz.dz6users.repositories.AccountRepository;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -74,4 +77,11 @@ public class BillingController {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping("/health")
+    public Map<String, String> health() {
+        log.info("Calling health()");
+        Map<String, String> response = new HashMap();
+        response.put("status", "OK");
+        return response;
+    }
 }

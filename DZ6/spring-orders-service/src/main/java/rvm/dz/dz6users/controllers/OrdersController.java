@@ -13,6 +13,7 @@ import rvm.dz.dz6users.repositories.ItemRepository;
 import rvm.dz.dz6users.repositories.OrderEntity;
 import rvm.dz.dz6users.repositories.OrderRepository;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -65,4 +66,11 @@ public class OrdersController {
         return ResponseEntity.ok(itemRepository.findAll());
     }
 
+    @RequestMapping("/health")
+    public Map<String, String> health() {
+        log.info("Calling health()");
+        Map<String, String> response = new HashMap();
+        response.put("status", "OK");
+        return response;
+    }
 }

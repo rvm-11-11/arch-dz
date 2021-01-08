@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import rvm.dz.dz6users.repositories.UserEntity;
 import rvm.dz.dz6users.repositories.UserRepository;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -47,4 +48,11 @@ public class UsersController {
         return ResponseEntity.ok(user);
     }
 
+    @RequestMapping("/health")
+    public Map<String, String> health() {
+        log.info("Calling health()");
+        Map<String, String> response = new HashMap();
+        response.put("status", "OK");
+        return response;
+    }
 }

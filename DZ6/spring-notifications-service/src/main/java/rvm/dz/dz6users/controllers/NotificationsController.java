@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -20,6 +21,9 @@ public class NotificationsController {
 
     @Autowired
     private KafkaTemplate<String, String> template;
+    @Value("${users-service.root-url}")
+    private String usersServiceRootUrl;
+
     ObjectMapper objectMapper = new ObjectMapper();
 
     private final NotificationRepository repository;
@@ -56,7 +60,7 @@ public class NotificationsController {
 
     private UserEntity getUserByUserId(Long userId) {
         RestTemplate restTemplate = new RestTemplate();
-        String userResourceUrl= "http://localhost:8081/users?id=" + userId;
+        String userResourceUrl= usersServiceRootUrl + "/users?id=" + userId;
         UserEntity user = restTemplate.getForObject(userResourceUrl, UserEntity.class);
         return user;
     }

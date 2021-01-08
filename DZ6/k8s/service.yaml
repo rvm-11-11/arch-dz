@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rvm-dz6-users-service
+spec:
+  selector:
+    app: dz6-users
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rvm-dz6-billing-service
+spec:
+  selector:
+    app: dz6-billing
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rvm-dz6-orders-service
+spec:
+  selector:
+    app: dz6-orders
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rvm-dz6-notifications-service
+spec:
+  selector:
+    app: dz6-notifications
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort

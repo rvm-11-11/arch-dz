@@ -41,7 +41,7 @@ https://kafka.apache.org/quickstart
 
 Seems to work!
 
-### Implementation
+### Implementation (outdated a bit)
 
 #### Users service
 
@@ -98,3 +98,35 @@ Seems to work!
 
     Subscribed to ORDER_PROCESSED
     Action: save to DB email with result
+
+### Scripts
+
+```
+cd spring-users-service
+./mvnw package
+docker build --tag rvm1111/arch:dz6-users-v2 .
+docker push rvm1111/arch:dz6-users-v2
+cd ..
+
+cd spring-billing-service
+./mvnw package
+docker build --tag rvm1111/arch:dz6-billing-v1 .
+docker push rvm1111/arch:dz6-billing-v1
+cd ..
+
+cd spring-orders-service
+./mvnw package
+docker build --tag rvm1111/arch:dz6-orders-v1 .
+docker push rvm1111/arch:dz6-orders-v1
+cd ..
+
+cd spring-notifications-service
+./mvnw package
+docker build --tag rvm1111/arch:dz6-notifications-v1 .
+docker push rvm1111/arch:dz6-notifications-v1
+cd ..
+```
+
+```
+kubectl exec --stdin --tty pod/rvm-dz6-notifications-deployment-8454c87b79-zwb6c  -- /bin/bash
+```

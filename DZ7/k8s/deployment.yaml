@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-dz7-orders-deployment
+  labels:
+    app: dz7-orders
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dz7-orders
+  template:
+    metadata:
+      labels:
+        app: dz7-orders
+    spec:
+      containers:
+        - name: dz7-orders
+          image: rvm1111/arch:dz7-orders-v1
+          ports:
+            - name: web
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5

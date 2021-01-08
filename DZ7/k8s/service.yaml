@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rvm-dz7-orders-service
+spec:
+  selector:
+    app: dz7-orders
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort

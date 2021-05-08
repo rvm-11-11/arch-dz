@@ -18,6 +18,10 @@ Server:
     
     bin/kafka-topics.sh --create --topic shopping-events --bootstrap-server localhost:9092
  
+ OR
+ 
+    bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic shopping-events
+ 
  Check server running and topic created:
  
     bin/kafka-topics.sh --describe --topic shopping-events --bootstrap-server localhost:9092
@@ -34,3 +38,4 @@ Consumer:
 
 https://www.baeldung.com/jpa-many-to-many
 
+sudo ss -lptn 'sport = :8080'

@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @Slf4j
-public class AppController {
+public class CudController {
 
     final EventRepository eventRepository;
     final ItemRepository itemRepository;
@@ -70,7 +70,7 @@ public class AppController {
                 .eventType(EventEntity.EventType.ORDER_CREATED)
                 .eventData(objectMapper.writeValueAsString(eventDataMap)).build();
 
-//            this.kafkaTemplate.send("orderCreated", objectMapper.writeValueAsString(event));
+            this.kafkaTemplate.send("shopping-events", objectMapper.writeValueAsString(event));
 
             // save event to DB
 //            String generatedOrderId = UUID.randomUUID().toString();
@@ -107,7 +107,7 @@ public class AppController {
         return response;
     }
 
-    public AppController(EventRepository eventRepository, ItemRepository itemRepository,
+    public CudController(EventRepository eventRepository, ItemRepository itemRepository,
                          OrderDenormalizedRepository orderDenormalizedRepository, OrderRepository orderRepository,
                          OrdersToItemsRepository ordersToItemsRepository, UserRepository userRepository,
                          KafkaTemplate kafkaTemplate) {

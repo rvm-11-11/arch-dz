@@ -1,5 +1,6 @@
 package rvm.dz.dz8cqrses.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +19,12 @@ public class CudController {
 
     final EventRepository eventRepository;
     final ItemRepository itemRepository;
-    final OrderDenormalizedRepository orderDenormalizedRepository;
+    final OrdersSearchIndex ordersSearchIndex;
     final OrderRepository orderRepository;
     final OrdersToItemsRepository ordersToItemsRepository;
     final UserRepository userRepository;
     final KafkaTemplate<String, String> kafkaTemplate;
+    final ObjectMapper objectMapper = new ObjectMapper();
 
     //user management is not ES/CQRS
     @GetMapping("/users")
@@ -46,11 +48,19 @@ public class CudController {
         return ResponseEntity.ok(orderRepository.findAll());
     }
 
+    @GetMapping("/items")
+    public ResponseEntity getAllItems() {
+        return ResponseEntity.ok(itemRepository.findAll());
+    }
+
+    @GetMapping("/ordersToItems")
+    public ResponseEntity getAllOrdersToItems() {
+        return ResponseEntity.ok(ordersToItemsRepository.findAll());
+    }
+
     @SneakyThrows
     @PostMapping("/orders")
     public ResponseEntity createOrder(@RequestBody CreateOrderRequest request) {
-        ObjectMapper objectMapper = new ObjectMapper();
-
         if (userRepository.existsById(request.getUserId())) {
             //save to DB
             OrderEntity createdOrder = orderRepository.save(OrderEntity.builder()
@@ -62,42 +72,125 @@ public class CudController {
             //publish event
             Map<String, String> eventDataMap = Map.of(
                     "userId",
-                    request.getUserId().toString());
-
-            EventEntity event = EventEntity.builder()
-                .entityType(EventEntity.EntityType.ORDER)
+                    request.getUserId().toString(),
+                    "createdAt",
+                    ((Long) createdOrder.getCreatedAt().getEpochSecond()).toString()
+            );
+            EventModel event = EventModel.builder()
+                .entityType(EventModel.EntityType.ORDER)
                 .entityId(createdOrder.getId())
-                .eventType(EventEntity.EventType.ORDER_CREATED)
-                .eventData(objectMapper.writeValueAsString(eventDataMap)).build();
+                .eventType(EventModel.EventType.ORDER_CREATED)
+                .eventData(eventDataMap).build();
 
             this.kafkaTemplate.send("shopping-events", objectMapper.writeValueAsString(event));
-
-            // save event to DB
-//            String generatedOrderId = UUID.randomUUID().toString();
-//            Map<String, String> eventDataMap = Map.of(
-//                    "userId",
-//                    request.getUserId().toString());
-//            eventRepository.save(
-//                    EventEntity.builder()
-//                            .entityType(EventEntity.EntityType.ORDER)
-//                            .entityId(generatedOrderId)
-//                            .eventType(EventEntity.EventType.ORDER_CREATED)
-//                            .eventData(objectMapper.writeValueAsString(eventDataMap)).build()
-//            );
-            // publish event
             return ResponseEntity.ok( Map.of("id", createdOrder.getId()));
         } else {
            return ResponseEntity.badRequest().body("not valid userId!");
         }
-//        OrderEntity createdOrder = orderRepository.save(
-//                OrderEntity.builder()
-//                        .userId(request.getUserId())
-//                        .status(OrderEntity.Status.NEW).build()
-//        );
-//
-//        return ResponseEntity.ok( Map.of("id", createdOrder.getId()));
-//        return ResponseEntity.ok(null);
     }
+
+    @SneakyThrows
+    @PostMapping("/orders/{orderId}/cancel")
+    public ResponseEntity cancelOrder(@PathVariable Long orderId) {
+        orderRepository.findById(orderId).ifPresent(orderEntity -> {
+            orderEntity.setStatus(OrderEntity.Status.CANCELLED);
+
+            EventModel event = EventModel.builder()
+                    .entityType(EventModel.EntityType.ORDER)
+                    .entityId(orderId)
+                    .eventType(EventModel.EventType.ORDER_CANCELLED).build();
+
+            try {
+                this.kafkaTemplate.send("shopping-events", objectMapper.writeValueAsString(event));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return ResponseEntity.ok().build();
+    }
+
+    @SneakyThrows
+    @PostMapping("/orders/{orderId}/confirm")
+    public ResponseEntity confirmOrder(@PathVariable Long orderId) {
+        orderRepository.findById(orderId).ifPresent(orderEntity -> {
+            orderEntity.setStatus(OrderEntity.Status.CANCELLED);
+
+            EventModel event = EventModel.builder()
+                    .entityType(EventModel.EntityType.ORDER)
+                    .entityId(orderId)
+                    .eventType(EventModel.EventType.ORDER_SENT_TO_PAYMENT).build();
+
+            try {
+                this.kafkaTemplate.send("shopping-events", objectMapper.writeValueAsString(event));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/orders/{orderId}/addItem")
+    public ResponseEntity addItemToOrder(@PathVariable Long orderId, @RequestBody AddItemToOrderRequest request) {
+        orderRepository.findById(orderId).ifPresent(orderEntity -> {
+            if (orderEntity.getStatus() == OrderEntity.Status.NEW) {
+                ordersToItemsRepository.save(OrdersToItemsEntity.builder()
+                        .itemId(request.getItemId())
+                        .orderId(orderId)
+                        .quantity(request.getQuantity()).build());
+
+                EventModel event = EventModel.builder()
+                        .entityType(EventModel.EntityType.ORDER)
+                        .entityId(orderId)
+                        .eventType(EventModel.EventType.ITEM_ADDED_TO_ORDER)
+                        .eventData(Map.of(
+                                "itemId", request.getItemId().toString(),
+                                "itemName", itemRepository.findById(request.getItemId()).get().getName(),
+                                "quantity", request.getQuantity().toString(),
+                                "price", itemRepository.findById(request.getItemId()).get().getPrice().toString()
+                        )).build();
+                try {
+                    this.kafkaTemplate.send("shopping-events", objectMapper.writeValueAsString(event));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/orders/{orderId}/removeItem")
+    public ResponseEntity removeItemFromOrder(@PathVariable Long orderId, @RequestBody AddItemToOrderRequest request) {
+        orderRepository.findById(orderId).ifPresent(orderEntity -> {
+            if (orderEntity.getStatus() == OrderEntity.Status.NEW) {
+                ordersToItemsRepository.findByOrderIdAndItemId(orderId, request.getItemId());
+                ordersToItemsRepository.save(OrdersToItemsEntity.builder()
+                        .itemId(request.getItemId())
+                        .orderId(orderId)
+                        .quantity(request.getQuantity()).build());
+
+                EventModel event = EventModel.builder()
+                        .entityType(EventModel.EntityType.ORDER)
+                        .entityId(orderId)
+                        .eventType(EventModel.EventType.ITEM_REMOVED_FROM_ORDER)
+                        .eventData(Map.of(
+                                "itemId", request.getItemId().toString()
+                        )).build();
+                try {
+                    this.kafkaTemplate.send("shopping-events", objectMapper.writeValueAsString(event));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        return ResponseEntity.ok().build();
+    }
+
 
     @RequestMapping("/health")
     public Map<String, String> health() {
@@ -108,12 +201,12 @@ public class CudController {
     }
 
     public CudController(EventRepository eventRepository, ItemRepository itemRepository,
-                         OrderDenormalizedRepository orderDenormalizedRepository, OrderRepository orderRepository,
+                         OrdersSearchIndex ordersSearchIndex, OrderRepository orderRepository,
                          OrdersToItemsRepository ordersToItemsRepository, UserRepository userRepository,
                          KafkaTemplate kafkaTemplate) {
         this.eventRepository = eventRepository;
         this.itemRepository = itemRepository;
-        this.orderDenormalizedRepository = orderDenormalizedRepository;
+        this.ordersSearchIndex = ordersSearchIndex;
         this.orderRepository = orderRepository;
         this.ordersToItemsRepository = ordersToItemsRepository;
         this.userRepository = userRepository;

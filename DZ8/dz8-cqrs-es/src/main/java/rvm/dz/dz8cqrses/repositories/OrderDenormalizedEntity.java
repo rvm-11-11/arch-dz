@@ -19,9 +19,8 @@ import java.time.Instant;
 @AllArgsConstructor
 public class OrderDenormalizedEntity {
     @Id
-    @JsonProperty("id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @JsonProperty("orderId")
+    private Long orderId;
 
     @JsonProperty("userId")
     private Long userId;

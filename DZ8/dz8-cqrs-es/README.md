@@ -15,12 +15,11 @@ Server:
     bin/zookeeper-server-start.sh config/zookeeper.properties
     
     bin/kafka-server-start.sh config/server.properties
+
+    bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic shopping-events
     
     bin/kafka-topics.sh --create --topic shopping-events --bootstrap-server localhost:9092
  
- OR
- 
-    bin/kafka-topics.sh --zookeeper localhost:2181 --delete --topic shopping-events
  
  Check server running and topic created:
  
@@ -39,3 +38,5 @@ Consumer:
 https://www.baeldung.com/jpa-many-to-many
 
 sudo ss -lptn 'sport = :8080'
+
+https://stackoverflow.com/questions/17730905/is-there-a-way-to-delete-all-the-data-from-a-topic-or-delete-the-topic-before-ev

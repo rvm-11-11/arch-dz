@@ -94,6 +94,7 @@ public class CudController {
     public ResponseEntity cancelOrder(@PathVariable Long orderId) {
         orderRepository.findById(orderId).ifPresent(orderEntity -> {
             orderEntity.setStatus(OrderEntity.Status.CANCELLED);
+            orderRepository.save(orderEntity);
 
             EventModel event = EventModel.builder()
                     .entityType(EventModel.EntityType.ORDER)
@@ -114,7 +115,8 @@ public class CudController {
     @PostMapping("/orders/{orderId}/confirm")
     public ResponseEntity confirmOrder(@PathVariable Long orderId) {
         orderRepository.findById(orderId).ifPresent(orderEntity -> {
-            orderEntity.setStatus(OrderEntity.Status.CANCELLED);
+            orderEntity.setStatus(OrderEntity.Status.READY_FOR_PAYMENT);
+            orderRepository.save(orderEntity);
 
             EventModel event = EventModel.builder()
                     .entityType(EventModel.EntityType.ORDER)
@@ -163,14 +165,12 @@ public class CudController {
     }
 
     @PostMapping("/orders/{orderId}/removeItem")
-    public ResponseEntity removeItemFromOrder(@PathVariable Long orderId, @RequestBody AddItemToOrderRequest request) {
+    public ResponseEntity removeItemFromOrder(@PathVariable Long orderId, @RequestBody RemoveItemFromOrderRequest request) {
         orderRepository.findById(orderId).ifPresent(orderEntity -> {
             if (orderEntity.getStatus() == OrderEntity.Status.NEW) {
-                ordersToItemsRepository.findByOrderIdAndItemId(orderId, request.getItemId());
-                ordersToItemsRepository.save(OrdersToItemsEntity.builder()
-                        .itemId(request.getItemId())
-                        .orderId(orderId)
-                        .quantity(request.getQuantity()).build());
+                OrdersToItemsEntity ordersToItemsEntityToBeRemoved =
+                        ordersToItemsRepository.findByOrderIdAndItemId(orderId, request.getItemId()).get(0);
+                ordersToItemsRepository.deleteById(ordersToItemsEntityToBeRemoved.getId());
 
                 EventModel event = EventModel.builder()
                         .entityType(EventModel.EntityType.ORDER)

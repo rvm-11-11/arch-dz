@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import rvm.dz.dz8cqrses.repositories.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -22,7 +24,7 @@ public class RController {
 
     final OrdersSearchIndex ordersSearchIndex;
     final KafkaTemplate<String, String> kafkaTemplate;
-    final ObjectMapper objectMapper = new ObjectMapper();
+    final static ObjectMapper objectMapper = new ObjectMapper();
 
     @KafkaListener(topics = "shopping-events")
     public void listen(ConsumerRecord<?, ?> cr) throws Exception {
@@ -106,12 +108,27 @@ public class RController {
 
     @GetMapping("/ordersSearch")
     public ResponseEntity ordersSearch() {
-        return ResponseEntity.ok(ordersSearchIndex.findAll());
+        return ResponseEntity.ok(
+                ordersSearchIndex.findAll().stream()
+                    .map(RController::entityToOutput).collect(Collectors.toList())
+        );
+    }
+
+    @SneakyThrows
+    private static OrderOutput entityToOutput(OrderDenormalizedEntity orderDenormalizedEntity) {
+        return OrderOutput.builder()
+                .createdAt(orderDenormalizedEntity.getCreatedAt())
+                .itemsList(objectMapper.readValue(orderDenormalizedEntity.getItemsList(), new TypeReference<List<DenormalizedItem>>(){}))
+                .orderId(orderDenormalizedEntity.getOrderId())
+                .status(OrderOutput.Status.valueOf(orderDenormalizedEntity.getStatus().toString()))
+                .total(orderDenormalizedEntity.getTotal())
+                .userId(orderDenormalizedEntity.getUserId())
+                .build();
     }
 
     @GetMapping("/ordersSearch/{orderId}")
     public ResponseEntity ordersSearchById(@PathVariable Long orderId) {
-        return ResponseEntity.ok(ordersSearchIndex.findById(orderId));
+        return ResponseEntity.ok(entityToOutput(ordersSearchIndex.findById(orderId).get()));
     }
 
 }

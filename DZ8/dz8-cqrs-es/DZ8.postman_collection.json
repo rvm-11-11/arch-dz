@@ -24,12 +24,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/health",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/health",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"health"
 					]
@@ -69,12 +67,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/users",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"users"
 					]
@@ -114,12 +110,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders"
 					]
@@ -142,12 +136,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders/{{orderId1}}/addItem",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders/{{orderId1}}/addItem",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders",
 						"{{orderId1}}",
@@ -172,12 +164,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders/{{orderId1}}/addItem",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders/{{orderId1}}/addItem",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders",
 						"{{orderId1}}",
@@ -252,12 +242,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ordersSearch/{{orderId1}}",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/ordersSearch/{{orderId1}}",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"ordersSearch",
 						"{{orderId1}}"
@@ -294,12 +282,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders/{{orderId1}}/removeItem",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders/{{orderId1}}/removeItem",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders",
 						"{{orderId1}}",
@@ -364,12 +350,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ordersSearch/{{orderId1}}",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/ordersSearch/{{orderId1}}",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"ordersSearch",
 						"{{orderId1}}"
@@ -406,12 +390,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders/{{orderId1}}/cancel",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders/{{orderId1}}/cancel",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders",
 						"{{orderId1}}",
@@ -476,12 +458,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ordersSearch/{{orderId1}}",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/ordersSearch/{{orderId1}}",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"ordersSearch",
 						"{{orderId1}}"
@@ -522,12 +502,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders"
 					]
@@ -564,12 +542,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders/{{orderId2}}/addItem",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders/{{orderId2}}/addItem",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders",
 						"{{orderId2}}",
@@ -608,12 +584,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders/{{orderId2}}/addItem",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders/{{orderId2}}/addItem",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders",
 						"{{orderId2}}",
@@ -652,12 +626,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders/{{orderId2}}/checkout",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders/{{orderId2}}/checkout",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders",
 						"{{orderId2}}",
@@ -731,12 +703,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ordersSearch/{{orderId2}}",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/ordersSearch/{{orderId2}}",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"ordersSearch",
 						"{{orderId2}}"
@@ -777,12 +747,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders"
 					]
@@ -836,12 +804,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ordersSearch/{{orderId3}}",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/ordersSearch/{{orderId3}}",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"ordersSearch",
 						"{{orderId3}}"
@@ -882,12 +848,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders"
 					]
@@ -924,12 +888,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/orders/{{orderId4}}/addItem",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/orders/{{orderId4}}/addItem",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"orders",
 						"{{orderId4}}",
@@ -995,12 +957,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ordersSearch/{{orderId4}}",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/ordersSearch/{{orderId4}}",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"ordersSearch",
 						"{{orderId4}}"
@@ -1041,12 +1001,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/users",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"users"
 					]
@@ -1171,12 +1129,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ordersSearch/",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/ordersSearch/",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"ordersSearch",
 						""
@@ -1256,12 +1212,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ordersSearch?statusFiltering=NEW",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/ordersSearch?statusFiltering=NEW",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"ordersSearch"
 					],
@@ -1389,12 +1343,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ordersSearch?orderField=createdAt",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/ordersSearch?orderField=createdAt",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"ordersSearch"
 					],
@@ -1522,12 +1474,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ordersSearch?orderField=total",
-					"protocol": "http",
+					"raw": "{{baseUrl}}/ordersSearch?orderField=total",
 					"host": [
-						"localhost"
+						"{{baseUrl}}"
 					],
-					"port": "8080",
 					"path": [
 						"ordersSearch"
 					],

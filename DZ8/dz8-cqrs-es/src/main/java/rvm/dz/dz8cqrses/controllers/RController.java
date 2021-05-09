@@ -107,10 +107,16 @@ public class RController {
     }
 
     @GetMapping("/ordersSearch")
-    public ResponseEntity ordersSearch() {
+    public ResponseEntity ordersSearch(@RequestParam(required = false) String orderField,
+                                       @RequestParam(required = false) String statusFiltering) {
         return ResponseEntity.ok(
-                ordersSearchIndex.findAll().stream()
-                    .map(RController::entityToOutput).collect(Collectors.toList())
+                ordersSearchIndex.findAll().stream().filter(order -> {
+                    if (statusFiltering == null) {
+                        return true;
+                    } else {
+                        return order.getStatus().name().equals(statusFiltering);
+                    }
+                }).map(RController::entityToOutput).collect(Collectors.toList())
         );
     }
 

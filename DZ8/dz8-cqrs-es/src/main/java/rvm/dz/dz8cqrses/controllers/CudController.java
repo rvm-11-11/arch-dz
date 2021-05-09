@@ -112,7 +112,7 @@ public class CudController {
     }
 
     @SneakyThrows
-    @PostMapping("/orders/{orderId}/confirm")
+    @PostMapping("/orders/{orderId}/checkout")
     public ResponseEntity confirmOrder(@PathVariable Long orderId) {
         orderRepository.findById(orderId).ifPresent(orderEntity -> {
             orderEntity.setStatus(OrderEntity.Status.READY_FOR_PAYMENT);

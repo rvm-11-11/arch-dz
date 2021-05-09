@@ -1,0 +1,1565 @@
+{
+	"info": {
+		"_postman_id": "a0420ccc-456c-4d25-896e-399a437ce7a3",
+		"name": "DZ8",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "0. health check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1. create customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"customerUserId\", jsonData.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Ivan\",\r\n    \"role\": \"CUSTOMER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. create order 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"orderId1\", jsonData.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": {{customerUserId}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. add item 1 to order 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"itemId\": 2,\r\n    \"quantity\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/{{orderId1}}/addItem",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"{{orderId1}}",
+						"addItem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. add item 2 order 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"itemId\": 1,\r\n    \"quantity\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/{{orderId1}}/addItem",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"{{orderId1}}",
+						"addItem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. get order 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"orderId1CreatedAt\", jsonData.createdAt);",
+							"",
+							"pm.test(\"Check status is NEW\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"NEW\");",
+							"});",
+							"",
+							"pm.test(\"Check total sum is correct\", function () {",
+							"    pm.expect(jsonData.total).to.eql(3100);",
+							"});",
+							"",
+							"pm.test(\"Check items added\", function () {",
+							"",
+							"    pm.expect(jsonData.itemsList).to.be.lengthOf(2);",
+							"",
+							"    var expectedItem1 = {",
+							"            \"id\": 2,",
+							"            \"name\": \"Chair\",",
+							"            \"price\": 300,",
+							"            \"quantity\": 2",
+							"        };",
+							"    pm.expect(pm.response.json().itemsList).to.deep.include(expectedItem1);",
+							"",
+							"    var expectedItem2 = {",
+							"            \"id\": 1,",
+							"            \"name\": \"Table\",",
+							"            \"price\": 2500,",
+							"            \"quantity\": 1",
+							"        };",
+							"",
+							"    pm.expect(pm.response.json().itemsList).to.deep.include(expectedItem2);",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ordersSearch/{{orderId1}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersSearch",
+						"{{orderId1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. delete item from order 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"itemId\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/{{orderId1}}/removeItem",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"{{orderId1}}",
+						"removeItem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "7. get order 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Check status is NEW\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"NEW\");",
+							"});",
+							"",
+							"pm.test(\"Check total sum is correct\", function () {",
+							"    pm.expect(jsonData.total).to.eql(2500);",
+							"});",
+							"",
+							"pm.test(\"Check item removed\", function () {",
+							"    pm.expect(jsonData.itemsList).to.be.lengthOf(1);",
+							"",
+							"    var expectedItem1 = {",
+							"            \"id\": 1,",
+							"            \"name\": \"Table\",",
+							"            \"price\": 2500,",
+							"            \"quantity\": 1",
+							"        };",
+							"",
+							"    pm.expect(pm.response.json().itemsList).to.deep.include(expectedItem1);",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ordersSearch/{{orderId1}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersSearch",
+						"{{orderId1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8. cancel order 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/{{orderId1}}/cancel",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"{{orderId1}}",
+						"cancel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "9. get order 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Check status is cancelled\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"CANCELLED\");",
+							"});",
+							"",
+							"pm.test(\"Check total sum is correct\", function () {",
+							"    pm.expect(jsonData.total).to.eql(2500);",
+							"});",
+							"",
+							"pm.test(\"Check item is present\", function () {",
+							"    pm.expect(jsonData.itemsList).to.be.lengthOf(1);",
+							"",
+							"    var expectedItem1 = {",
+							"            \"id\": 1,",
+							"            \"name\": \"Table\",",
+							"            \"price\": 2500,",
+							"            \"quantity\": 1",
+							"        };",
+							"",
+							"    pm.expect(pm.response.json().itemsList).to.deep.include(expectedItem1);",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ordersSearch/{{orderId1}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersSearch",
+						"{{orderId1}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "10. create order 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"orderId2\", jsonData.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": {{customerUserId}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "11. add item 3 to order 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"itemId\": 3,\r\n    \"quantity\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/{{orderId2}}/addItem",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"{{orderId2}}",
+						"addItem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "12. add item 2 to order 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"itemId\": 2,\r\n    \"quantity\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/{{orderId2}}/addItem",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"{{orderId2}}",
+						"addItem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "13. checkout order 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Ivan\",\r\n    \"role\": \"CUSTOMER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/{{orderId2}}/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"{{orderId2}}",
+						"checkout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "14. get order 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"orderId2CreatedAt\", jsonData.createdAt);",
+							"",
+							"pm.test(\"Check status is ready for payment\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"READY_FOR_PAYMENT\");",
+							"});",
+							"",
+							"pm.test(\"Check total sum is correct\", function () {",
+							"    pm.expect(jsonData.total).to.eql(3800);",
+							"});",
+							"",
+							"pm.test(\"Check items present\", function () {",
+							"    pm.expect(jsonData.itemsList).to.be.lengthOf(2);",
+							"",
+							"    var expectedItem1 = {",
+							"            \"id\": 3,",
+							"            \"name\": \"Sofa\",",
+							"            \"price\": 700,",
+							"            \"quantity\": 5",
+							"        };",
+							"",
+							"    pm.expect(pm.response.json().itemsList).to.deep.include(expectedItem1);",
+							"",
+							"    var expectedItem2 = {",
+							"            \"id\": 2,",
+							"            \"name\": \"Chair\",",
+							"            \"price\": 300,",
+							"            \"quantity\": 1",
+							"        };",
+							"",
+							"    pm.expect(pm.response.json().itemsList).to.deep.include(expectedItem2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ordersSearch/{{orderId2}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersSearch",
+						"{{orderId2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "15. create order 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"orderId3\", jsonData.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": {{customerUserId}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "16. get order 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"orderId3CreatedAt\", jsonData.createdAt);",
+							"",
+							"pm.test(\"Check status is new\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"NEW\");",
+							"});",
+							"",
+							"pm.test(\"Check total sum is correct\", function () {",
+							"    pm.expect(jsonData.total).to.eql(0);",
+							"});",
+							"",
+							"pm.test(\"Check no items present\", function () {",
+							"    pm.expect(jsonData.itemsList).to.be.lengthOf(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ordersSearch/{{orderId3}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersSearch",
+						"{{orderId3}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "17. create order 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"orderId4\", jsonData.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": {{customerUserId}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "18. add item 1 to order 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"itemId\": 1,\r\n    \"quantity\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/orders/{{orderId4}}/addItem",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"orders",
+						"{{orderId4}}",
+						"addItem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "19. get order 4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"orderId4CreatedAt\", jsonData.createdAt);",
+							"",
+							"pm.test(\"Check status is new\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"NEW\");",
+							"});",
+							"",
+							"pm.test(\"Check total sum is correct\", function () {",
+							"    pm.expect(jsonData.total).to.eql(25000);",
+							"});",
+							"",
+							"pm.test(\"Check items present\", function () {",
+							"    pm.expect(jsonData.itemsList).to.be.lengthOf(1);",
+							"",
+							"    var expectedItem1 = {",
+							"            \"id\": 1,",
+							"            \"name\": \"Table\",",
+							"            \"price\": 2500,",
+							"            \"quantity\": 10",
+							"        };",
+							"",
+							"    pm.expect(pm.response.json().itemsList).to.deep.include(expectedItem1);",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ordersSearch/{{orderId4}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersSearch",
+						"{{orderId4}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "20. create admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.globals.set(\"adminUserId\", jsonData.id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Vasya\",\r\n    \"role\": \"ADMIN\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "21. get all orders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Check there are 4 orders\", function () {",
+							"    pm.expect(jsonData).to.be.lengthOf(4);",
+							"});",
+							"",
+							"pm.test(\"Check order1 present\", function () {",
+							"    var order1 = {",
+							"        \"orderId\": pm.globals.get(\"orderId1\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"CANCELLED\",",
+							"        \"createdAt\": pm.globals.get(\"orderId1CreatedAt\"),",
+							"        \"total\": 2500,",
+							"        \"itemsList\": [",
+							"            {",
+							"                \"id\": 1,",
+							"                \"name\": \"Table\",",
+							"                \"price\": 2500,",
+							"                \"quantity\": 1",
+							"            }",
+							"        ]",
+							"    };",
+							"",
+							"    pm.expect(pm.response.json()).to.deep.include(order1);",
+							"});",
+							"",
+							"pm.test(\"Check order2 present\", function () {",
+							"    var order2 =     {",
+							"        \"orderId\": pm.globals.get(\"orderId2\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"READY_FOR_PAYMENT\",",
+							"        \"createdAt\": pm.globals.get(\"orderId2CreatedAt\"),",
+							"        \"total\": 3800,",
+							"        \"itemsList\": [",
+							"            {",
+							"                \"id\": 3,",
+							"                \"name\": \"Sofa\",",
+							"                \"price\": 700,",
+							"                \"quantity\": 5",
+							"            },",
+							"            {",
+							"                \"id\": 2,",
+							"                \"name\": \"Chair\",",
+							"                \"price\": 300,",
+							"                \"quantity\": 1",
+							"            }",
+							"        ]",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()).to.deep.include(order2);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check order3 present\", function () {",
+							"    var order3 = { ",
+							"        \"orderId\": pm.globals.get(\"orderId3\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"NEW\",",
+							"        \"createdAt\": pm.globals.get(\"orderId3CreatedAt\"),   ",
+							"        \"total\": 0,",
+							"        \"itemsList\": []",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()).to.deep.include(order3);",
+							"});",
+							"",
+							"pm.test(\"Check order4 present\", function () {",
+							"    var order4 = { ",
+							"        \"orderId\": pm.globals.get(\"orderId4\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"NEW\",",
+							"        \"createdAt\": pm.globals.get(\"orderId4CreatedAt\"),   ",
+							"        \"total\": 25000,",
+							"        \"itemsList\": [",
+							"            {",
+							"                \"id\": 1,",
+							"                \"name\": \"Table\",",
+							"                \"price\": 2500,",
+							"                \"quantity\": 10",
+							"            }",
+							"        ]",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()).to.deep.include(order4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ordersSearch/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersSearch",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "22. check filtering",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Check there are 2 orders\", function () {",
+							"    pm.expect(jsonData).to.be.lengthOf(2);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Check order3 present\", function () {",
+							"    var order3 = { ",
+							"        \"orderId\": pm.globals.get(\"orderId3\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"NEW\",",
+							"        \"createdAt\": pm.globals.get(\"orderId3CreatedAt\"),   ",
+							"        \"total\": 0,",
+							"        \"itemsList\": []",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()).to.deep.include(order3);",
+							"});",
+							"",
+							"pm.test(\"Check order4 present\", function () {",
+							"    var order4 = { ",
+							"        \"orderId\": pm.globals.get(\"orderId4\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"NEW\",",
+							"        \"createdAt\": pm.globals.get(\"orderId4CreatedAt\"),   ",
+							"        \"total\": 25000,",
+							"        \"itemsList\": [",
+							"            {",
+							"                \"id\": 1,",
+							"                \"name\": \"Table\",",
+							"                \"price\": 2500,",
+							"                \"quantity\": 10",
+							"            }",
+							"        ]",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()).to.deep.include(order4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ordersSearch?statusFiltering=NEW",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersSearch"
+					],
+					"query": [
+						{
+							"key": "statusFiltering",
+							"value": "NEW"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "23. check sorting by date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"//order3, order1, order2, order4",
+							"",
+							"pm.test(\"Check order3 is third in the list\", function () {",
+							"    var order3 = { ",
+							"        \"orderId\": pm.globals.get(\"orderId3\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"NEW\",",
+							"        \"createdAt\": pm.globals.get(\"orderId3CreatedAt\"),   ",
+							"        \"total\": 0,",
+							"        \"itemsList\": []",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()[2]).to.deep.eq(order3);",
+							"});",
+							"",
+							"pm.test(\"Check order1 is first in the list\", function () {",
+							"    var order1 = {",
+							"        \"orderId\": pm.globals.get(\"orderId1\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"CANCELLED\",",
+							"        \"createdAt\": pm.globals.get(\"orderId1CreatedAt\"),",
+							"        \"total\": 2500,",
+							"        \"itemsList\": [",
+							"            {",
+							"                \"id\": 1,",
+							"                \"name\": \"Table\",",
+							"                \"price\": 2500,",
+							"                \"quantity\": 1",
+							"            }",
+							"        ]",
+							"    };",
+							"",
+							"    pm.expect(pm.response.json()[0]).to.deep.eq(order1);",
+							"});",
+							"",
+							"pm.test(\"Check order2 is second in the list\", function () {",
+							"    var order2 =     {",
+							"        \"orderId\": pm.globals.get(\"orderId2\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"READY_FOR_PAYMENT\",",
+							"        \"createdAt\": pm.globals.get(\"orderId2CreatedAt\"),",
+							"        \"total\": 3800,",
+							"        \"itemsList\": [",
+							"            {",
+							"                \"id\": 3,",
+							"                \"name\": \"Sofa\",",
+							"                \"price\": 700,",
+							"                \"quantity\": 5",
+							"            },",
+							"            {",
+							"                \"id\": 2,",
+							"                \"name\": \"Chair\",",
+							"                \"price\": 300,",
+							"                \"quantity\": 1",
+							"            }",
+							"        ]",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()[1]).to.deep.eq(order2);",
+							"});",
+							"",
+							"pm.test(\"Check order4 is forth in the list\", function () {",
+							"    var order4 = { ",
+							"        \"orderId\": pm.globals.get(\"orderId4\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"NEW\",",
+							"        \"createdAt\": pm.globals.get(\"orderId4CreatedAt\"),   ",
+							"        \"total\": 25000,",
+							"        \"itemsList\": [",
+							"            {",
+							"                \"id\": 1,",
+							"                \"name\": \"Table\",",
+							"                \"price\": 2500,",
+							"                \"quantity\": 10",
+							"            }",
+							"        ]",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()[3]).to.deep.eq(order4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ordersSearch?orderField=createdAt",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersSearch"
+					],
+					"query": [
+						{
+							"key": "orderField",
+							"value": "createdAt"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "24. check sorting by price",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"//order3, order1, order2, order4",
+							"",
+							"pm.test(\"Check order3 is first in the list\", function () {",
+							"    var order3 = { ",
+							"        \"orderId\": pm.globals.get(\"orderId3\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"NEW\",",
+							"        \"createdAt\": pm.globals.get(\"orderId3CreatedAt\"),   ",
+							"        \"total\": 0,",
+							"        \"itemsList\": []",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()[0]).to.deep.eq(order3);",
+							"});",
+							"",
+							"pm.test(\"Check order1 is second in the list\", function () {",
+							"    var order1 = {",
+							"        \"orderId\": pm.globals.get(\"orderId1\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"CANCELLED\",",
+							"        \"createdAt\": pm.globals.get(\"orderId1CreatedAt\"),",
+							"        \"total\": 2500,",
+							"        \"itemsList\": [",
+							"            {",
+							"                \"id\": 1,",
+							"                \"name\": \"Table\",",
+							"                \"price\": 2500,",
+							"                \"quantity\": 1",
+							"            }",
+							"        ]",
+							"    };",
+							"",
+							"    pm.expect(pm.response.json()[1]).to.deep.eq(order1);",
+							"});",
+							"",
+							"pm.test(\"Check order2 is third in the list\", function () {",
+							"    var order2 =     {",
+							"        \"orderId\": pm.globals.get(\"orderId2\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"READY_FOR_PAYMENT\",",
+							"        \"createdAt\": pm.globals.get(\"orderId2CreatedAt\"),",
+							"        \"total\": 3800,",
+							"        \"itemsList\": [",
+							"            {",
+							"                \"id\": 3,",
+							"                \"name\": \"Sofa\",",
+							"                \"price\": 700,",
+							"                \"quantity\": 5",
+							"            },",
+							"            {",
+							"                \"id\": 2,",
+							"                \"name\": \"Chair\",",
+							"                \"price\": 300,",
+							"                \"quantity\": 1",
+							"            }",
+							"        ]",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()[2]).to.deep.eq(order2);",
+							"});",
+							"",
+							"pm.test(\"Check order4 is forth in the list\", function () {",
+							"    var order4 = { ",
+							"        \"orderId\": pm.globals.get(\"orderId4\"),",
+							"        \"userId\": pm.globals.get(\"customerUserId\"),",
+							"        \"status\": \"NEW\",",
+							"        \"createdAt\": pm.globals.get(\"orderId4CreatedAt\"),   ",
+							"        \"total\": 25000,",
+							"        \"itemsList\": [",
+							"            {",
+							"                \"id\": 1,",
+							"                \"name\": \"Table\",",
+							"                \"price\": 2500,",
+							"                \"quantity\": 10",
+							"            }",
+							"        ]",
+							"    }",
+							"",
+							"    pm.expect(pm.response.json()[3]).to.deep.eq(order4);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/ordersSearch?orderField=total",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ordersSearch"
+					],
+					"query": [
+						{
+							"key": "orderField",
+							"value": "total"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

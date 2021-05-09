@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import rvm.dz.dz8cqrses.repositories.*;
 
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,15 +110,21 @@ public class RController {
     @GetMapping("/ordersSearch")
     public ResponseEntity ordersSearch(@RequestParam(required = false) String orderField,
                                        @RequestParam(required = false) String statusFiltering) {
-        return ResponseEntity.ok(
-                ordersSearchIndex.findAll().stream().filter(order -> {
-                    if (statusFiltering == null) {
-                        return true;
-                    } else {
-                        return order.getStatus().name().equals(statusFiltering);
-                    }
-                }).map(RController::entityToOutput).collect(Collectors.toList())
-        );
+        List<OrderOutput> filteredList = ordersSearchIndex.findAll().stream().filter(order -> {
+            if (statusFiltering == null) {
+                return true;
+            } else {
+                return order.getStatus().name().equals(statusFiltering);
+            }
+        }).map(RController::entityToOutput).collect(Collectors.toList());
+
+        if(orderField != null && orderField.equals("total")) {
+            filteredList.sort(Comparator.comparing(OrderOutput::getTotal));
+        } else {
+            filteredList.sort(Comparator.comparing(OrderOutput::getCreatedAt));
+        }
+
+        return ResponseEntity.ok(filteredList);
     }
 
     @SneakyThrows

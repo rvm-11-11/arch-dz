@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-dz8-shopping-deployment
+  labels:
+    app: dz8-shopping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dz8-shopping
+  template:
+    metadata:
+      labels:
+        app: dz8-shopping
+    spec:
+      containers:
+        - name: dz8-shopping
+          image: rvm1111/arch:dz8-shopping-v1
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.streams.svc.cluster.local:9092
+          ports:
+            - name: web
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5

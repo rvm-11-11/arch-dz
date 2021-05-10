@@ -76,3 +76,6 @@ kubectl apply -f ./k8s/.
 
 2) Тесты постмана:
 newman run DZ6.postman_collection.json --environment=local-k8s-ingress.postman_environment.json  --folder "k8s ingress"
+
+newman run DZ8.postman_collection.json --environment=local-k8s-ingress.postman_environment.json
+

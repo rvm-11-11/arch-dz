@@ -24,7 +24,7 @@ import static rvm.dz.dz10saga.repositories.PaymentEntity.Status.ROLLED_BACK;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class OrdersController {
+public class PaymentController {
 
     private final PaymentRepostitory paymentRepostitory;
 

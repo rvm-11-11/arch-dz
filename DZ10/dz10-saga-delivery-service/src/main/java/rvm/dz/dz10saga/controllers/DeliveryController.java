@@ -50,29 +50,30 @@ public class DeliveryController {
             case ORDER_PENDING:
                 Instant deliveryDate = Instant.ofEpochSecond(parseLong(incomingEvent.getEventData().get("deliveryDate")));
                 if(deliveryRepository.findByOrderId(incomingEvent.getOrderId()).isEmpty()) {
-                    if (deliveryDate.isBefore(Instant.now().plus(30, ChronoUnit.DAYS))) {
-                        DeliveryEntity createdPayment = deliveryRepository.save(DeliveryEntity.builder()
+                    Instant earliestPossibleDeliveryDate = Instant.now().plus(30, ChronoUnit.DAYS);
+                    if (deliveryDate.isAfter(earliestPossibleDeliveryDate)) {
+                        DeliveryEntity createdDelivery = deliveryRepository.save(DeliveryEntity.builder()
                                 .orderId(incomingEvent.getOrderId())
                                 .deliveryDate(deliveryDate)
                                 .deliveryStatus(DeliveryEntity.Status.APPROVED)
                                 .build());
 
                         Event outgoingEvent = Event.builder()
-                                .orderId(createdPayment.getOrderId())
+                                .orderId(createdDelivery.getOrderId())
                                 .eventType(Event.EventType.DELIVERY_APPROVED)
                                 .build();
 
                         this.template.send("shopping-events", objectMapper.writeValueAsString(outgoingEvent));
 
                     } else {
-                        DeliveryEntity createdPayment = deliveryRepository.save(DeliveryEntity.builder()
+                        DeliveryEntity createdDelivery = deliveryRepository.save(DeliveryEntity.builder()
                                 .orderId(incomingEvent.getOrderId())
                                 .deliveryDate(deliveryDate)
                                 .deliveryStatus(DeliveryEntity.Status.REJECTED)
                                 .build());
 
                         Event outgoingEvent = Event.builder()
-                                .orderId(createdPayment.getOrderId())
+                                .orderId(createdDelivery.getOrderId())
                                 .eventType(Event.EventType.DELIVERY_REJECTED)
                                 .build();
 
@@ -82,9 +83,10 @@ public class DeliveryController {
                 break;
             case ORDER_REJECTED:
 //                deliveryDate = Instant.ofEpochSecond(parseLong(incomingEvent.getEventData().get("deliveryDate")));
-                deliveryRepository.findByOrderId(incomingEvent.getOrderId()).ifPresentOrElse(paymentEntity -> {
-                            log.info("Returning time slot as available: " + paymentEntity.getDeliveryDate());
-                            paymentEntity.setDeliveryStatus(ROLLED_BACK);
+                deliveryRepository.findByOrderId(incomingEvent.getOrderId()).ifPresentOrElse(deliveryEntity -> {
+                            log.info("Returning time slot as available: " + deliveryEntity.getDeliveryDate());
+                            deliveryEntity.setDeliveryStatus(ROLLED_BACK);
+                            deliveryRepository.save(deliveryEntity);
                         }, () -> {
                                 DeliveryEntity createdPayment = deliveryRepository.save(DeliveryEntity.builder()
                                     .orderId(incomingEvent.getOrderId())

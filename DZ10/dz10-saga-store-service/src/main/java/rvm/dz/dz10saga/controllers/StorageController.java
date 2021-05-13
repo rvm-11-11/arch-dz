@@ -1,6 +1,5 @@
 package rvm.dz.dz10saga.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -12,21 +11,21 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 import rvm.dz.dz10saga.repositories.Event;
-import rvm.dz.dz10saga.repositories.PaymentEntity;
-import rvm.dz.dz10saga.repositories.PaymentRepostitory;
+import rvm.dz.dz10saga.repositories.StorageEntity;
+import rvm.dz.dz10saga.repositories.StorageRepostitory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Long.parseLong;
-import static rvm.dz.dz10saga.repositories.PaymentEntity.Status.ROLLED_BACK;
+import static rvm.dz.dz10saga.repositories.StorageEntity.Status.ROLLED_BACK;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class PaymentController {
+public class StorageController {
 
-    private final PaymentRepostitory paymentRepostitory;
+    private final StorageRepostitory storageRepostitory;
 
     @Autowired
     private KafkaTemplate<String, String> template;
@@ -44,31 +43,31 @@ public class PaymentController {
     private void applyEvent(Event incomingEvent) {
         switch (incomingEvent.getEventType()) {
             case ORDER_PENDING:
-                if(paymentRepostitory.findByOrderId(incomingEvent.getOrderId()).isEmpty()) {
-                    if (parseLong(incomingEvent.getEventData().get("price")) < 5000) {
-                        PaymentEntity createdPayment = paymentRepostitory.save(PaymentEntity.builder()
+                if(storageRepostitory.findByOrderId(incomingEvent.getOrderId()).isEmpty()) {
+                    if (parseLong(incomingEvent.getEventData().get("itemId")) > 3) {
+                        StorageEntity createdPayment = storageRepostitory.save(StorageEntity.builder()
                                 .orderId(incomingEvent.getOrderId())
-                                .price(parseLong(incomingEvent.getEventData().get("price")))
-                                .paymentStatus(PaymentEntity.Status.APPROVED)
+                                .itemId(parseLong(incomingEvent.getEventData().get("itemId")))
+                                .storeStatus(StorageEntity.Status.APPROVED)
                                 .build());
 
                         Event outgoingEvent = Event.builder()
                                 .orderId(createdPayment.getOrderId())
-                                .eventType(Event.EventType.PAYMENT_APPROVED)
+                                .eventType(Event.EventType.STORE_RESERVATION_APPROVED)
                                 .build();
 
                         this.template.send("shopping-events", objectMapper.writeValueAsString(outgoingEvent));
 
                     } else {
-                        PaymentEntity createdPayment = paymentRepostitory.save(PaymentEntity.builder()
+                        StorageEntity createdPayment = storageRepostitory.save(StorageEntity.builder()
                                 .orderId(incomingEvent.getOrderId())
-                                .price(parseLong(incomingEvent.getEventData().get("price")))
-                                .paymentStatus(PaymentEntity.Status.REJECTED)
+                                .itemId(parseLong(incomingEvent.getEventData().get("itemId")))
+                                .storeStatus(StorageEntity.Status.REJECTED)
                                 .build());
 
                         Event outgoingEvent = Event.builder()
                                 .orderId(createdPayment.getOrderId())
-                                .eventType(Event.EventType.PAYMENT_REJECTED)
+                                .eventType(Event.EventType.STORE_RESERVATION_REJECTED)
                                 .build();
 
                         this.template.send("shopping-events", objectMapper.writeValueAsString(outgoingEvent));
@@ -76,15 +75,15 @@ public class PaymentController {
                 }
                 break;
             case ORDER_REJECTED:
-                paymentRepostitory.findByOrderId(incomingEvent.getOrderId()).ifPresentOrElse(paymentEntity -> {
-                            log.info("Returning money to customer: " + paymentEntity.getPrice());
-                            paymentEntity.setPaymentStatus(ROLLED_BACK);
-                            paymentRepostitory.save(paymentEntity);
+                storageRepostitory.findByOrderId(incomingEvent.getOrderId()).ifPresentOrElse(storageEntity -> {
+                            log.info("Unblocking the item: " + storageEntity.getItemId());
+                            storageEntity.setStoreStatus(ROLLED_BACK);
+                            storageRepostitory.save(storageEntity);
                         }, () -> {
-                            PaymentEntity createdPayment = paymentRepostitory.save(PaymentEntity.builder()
+                            StorageEntity createdPayment = storageRepostitory.save(StorageEntity.builder()
                                     .orderId(incomingEvent.getOrderId())
-                                    .price(parseLong(incomingEvent.getEventData().get("price")))
-                                    .paymentStatus(PaymentEntity.Status.REJECTED)
+                                    .itemId(parseLong(incomingEvent.getEventData().get("itemId")))
+                                    .storeStatus(StorageEntity.Status.REJECTED)
                                     .build());
                         }
                 );
@@ -94,9 +93,9 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/payments")
-    public ResponseEntity getAllPayments() {
-        return ResponseEntity.ok(paymentRepostitory.findAll());
+    @GetMapping("/stores")
+    public ResponseEntity getAllStores() {
+        return ResponseEntity.ok(storageRepostitory.findAll());
     }
 
     @RequestMapping("/health")

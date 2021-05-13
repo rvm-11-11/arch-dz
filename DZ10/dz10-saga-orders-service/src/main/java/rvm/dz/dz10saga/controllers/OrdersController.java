@@ -62,6 +62,44 @@ public class OrdersController {
                 this.template.send( "shopping-events", objectMapper.writeValueAsString(event));
 
                 break;
+            case DELIVERY_APPROVED:
+                orderEntity = orderRepository.findById(incomingEvent.getOrderId()).get();
+                orderEntity.setDeliveryStatus(OrderEntity.Status.APPROVED);
+                savedEntity = orderRepository.save(orderEntity);
+                checkIfAllPartsApproved(savedEntity);
+                break;
+            case DELIVERY_REJECTED:
+                orderEntity = orderRepository.findById(incomingEvent.getOrderId()).get();
+                orderEntity.setDeliveryStatus(OrderEntity.Status.REJECTED);
+                orderEntity.setOverallStatus(OrderEntity.Status.REJECTED);
+                savedEntity = orderRepository.save(orderEntity);
+
+                event = Event.builder()
+                        .orderId(savedEntity.getOrderId())
+                        .eventType(Event.EventType.ORDER_REJECTED)
+                        .build();
+
+                this.template.send( "shopping-events", objectMapper.writeValueAsString(event));
+            case STORE_RESERVATION_APPROVED:
+                orderEntity = orderRepository.findById(incomingEvent.getOrderId()).get();
+                orderEntity.setStoreStatus(OrderEntity.Status.APPROVED);
+                savedEntity = orderRepository.save(orderEntity);
+                checkIfAllPartsApproved(savedEntity);
+                break;
+            case STORE_RESERVATION_REJECTED:
+                orderEntity = orderRepository.findById(incomingEvent.getOrderId()).get();
+                orderEntity.setStoreStatus(OrderEntity.Status.REJECTED);
+                orderEntity.setOverallStatus(OrderEntity.Status.REJECTED);
+                savedEntity = orderRepository.save(orderEntity);
+
+                event = Event.builder()
+                        .orderId(savedEntity.getOrderId())
+                        .eventType(Event.EventType.ORDER_REJECTED)
+                        .build();
+
+                this.template.send( "shopping-events", objectMapper.writeValueAsString(event));
+
+                break;
             default:
                 log.info("event ignored " + incomingEvent);
         }

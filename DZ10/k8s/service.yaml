@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rvm-dz6-users-service
+  name: rvm-dz10-orders-service
 spec:
   selector:
-    app: dz6-users
+    app: dz10-orders
   ports:
     - protocol: TCP
       port: 8080
@@ -14,10 +14,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rvm-dz6-billing-service
+  name: rvm-dz10-payments-service
 spec:
   selector:
-    app: dz6-billing
+    app: dz10-payments
   ports:
     - protocol: TCP
       port: 8080
@@ -27,10 +27,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rvm-dz6-orders-service
+  name: rvm-dz10-delivery-service
 spec:
   selector:
-    app: dz6-orders
+    app: dz10-delivery
   ports:
     - protocol: TCP
       port: 8080
@@ -40,10 +40,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rvm-dz6-notifications-service
+  name: rvm-dz10-store-service
 spec:
   selector:
-    app: dz6-notifications
+    app: dz10-store
   ports:
     - protocol: TCP
       port: 8080

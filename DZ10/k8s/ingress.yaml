@@ -10,41 +10,41 @@ spec:
     - host: arch.homework
       http:
         paths:
-          - path: /otusapp/romanov($|/)(register)
+          - path: /otusapp/romanov($|/)(orders)
             pathType: ImplementationSpecific
             backend:
               service:
-                name: rvm-dz6-users-service
+                name: rvm-dz10-orders-service
                 port:
                   number: 8080
 
-          - path: /otusapp/romanov($|/)(account)
+          - path: /otusapp/romanov($|/)(deliveries)
             pathType: ImplementationSpecific
             backend:
               service:
-                name: rvm-dz6-billing-service
+                name: rvm-dz10-delivery-service
                 port:
                   number: 8080
-          - path: /otusapp/romanov($|/)(deposit)
+          - path: /otusapp/romanov($|/)(stores)
             pathType: ImplementationSpecific
             backend:
               service:
-                name: rvm-dz6-billing-service
-                port:
-                  number: 8080
-
-          - path: /otusapp/romanov($|/)(order)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: rvm-dz6-orders-service
+                name: rvm-dz10-store-service
                 port:
                   number: 8080
 
-          - path: /otusapp/romanov($|/)(notification)
+          - path: /otusapp/romanov($|/)(payments)
             pathType: ImplementationSpecific
             backend:
               service:
-                name: rvm-dz6-notifications-service
+                name: rvm-dz10-payments-service
                 port:
                   number: 8080
+          #
+          # - path: /otusapp/romanov($|/)(notification)
+          #   pathType: ImplementationSpecific
+          #   backend:
+          #     service:
+          #       name: rvm-dz6-notifications-service
+          #       port:
+          #         number: 8080

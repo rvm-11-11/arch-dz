@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rvm-dz10-orders-service
+spec:
+  selector:
+    app: dz10-orders
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rvm-dz10-payments-service
+spec:
+  selector:
+    app: dz10-payments
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rvm-dz10-delivery-service
+spec:
+  selector:
+    app: dz10-delivery
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rvm-dz10-store-service
+spec:
+  selector:
+    app: dz10-store
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort

@@ -1,0 +1,157 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-dz10-orders-deployment
+  labels:
+    app: dz10-orders
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dz10-orders
+  template:
+    metadata:
+      labels:
+        app: dz10-orders
+    spec:
+      containers:
+        - name: dz10-orders
+          image: rvm1111/arch:dz10-orders-v1
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.streams.svc.cluster.local:9092
+          ports:
+            - name: web
+              containerPort: 8081
+          livenessProbe:
+            httpGet:
+              port: 8081
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8081
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-dz10-payments-deployment
+  labels:
+    app: dz10-payments
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dz10-payments
+  template:
+    metadata:
+      labels:
+        app: dz10-payments
+    spec:
+      containers:
+        - name: dz10-payments
+          image: rvm1111/arch:dz10-payments-v1
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.streams.svc.cluster.local:9092
+          ports:
+            - name: web
+              containerPort: 8082
+          livenessProbe:
+            httpGet:
+              port: 8082
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8082
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-dz10-delivery-deployment
+  labels:
+    app: dz10-delivery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dz10-delivery
+  template:
+    metadata:
+      labels:
+        app: dz10-delivery
+    spec:
+      containers:
+        - name: dz10-delivery
+          image: rvm1111/arch:dz10-delivery-v1
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.streams.svc.cluster.local:9092
+          ports:
+            - name: web
+              containerPort: 8083
+          livenessProbe:
+            httpGet:
+              port: 8083
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8083
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-dz10-store-deployment
+  labels:
+    app: dz10-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dz10-store
+  template:
+    metadata:
+      labels:
+        app: dz10-store
+    spec:
+      containers:
+        - name: dz10-store
+          image: rvm1111/arch:dz10-store-v1
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.streams.svc.cluster.local:9092
+            # - name: USERS_SERVICE_ROOT_URL
+            #   value: http://rvm-dz6-users-service:8080
+          ports:
+            - name: web
+              containerPort: 8084
+          livenessProbe:
+            httpGet:
+              port: 8084
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8084
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5

@@ -39,7 +39,7 @@ public class FlightsController {
         switch (incomingEvent.getEventType()) {
             case ORDER_PENDING:
                 if(flightsRepository.findByOrderId(incomingEvent.getOrderId()).isEmpty()) {
-                    if (!incomingEvent.getEventData().get("toDestination").equalsIgnoreCase("Innsbruck")) {
+                    if (!incomingEvent.getEventData().get("toDestination").equalsIgnoreCase("Oslo")) {
                         FlightEntity createdFlight = flightsRepository.save(FlightEntity.builder()
                                 .orderId(incomingEvent.getOrderId())
                                 .fromDestination(incomingEvent.getEventData().get("fromDestination"))

@@ -6,6 +6,218 @@
 	},
 	"item": [
 		{
+			"name": "users management",
+			"item": [
+				{
+					"name": "create admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"adminId\", jsonData.userId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Vasya\",\n    \"role\": \"ADMIN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create customer 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"customerId1\", jsonData.userId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Alex\",\n    \"role\": \"CUSTOMER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create customer 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"customerId2\", jsonData.userId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Ivan\",\n    \"role\": \"CUSTOMER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check 3 users created with proper roles",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check 3 users created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"",
+									"    pm.expect(jsonData.length).to.eql(3);",
+									"",
+									"    var expectedUser1 = {",
+									"        \"userId\": pm.globals.get(\"adminId\"),",
+									"        \"name\": \"Vasya\",",
+									"        \"role\": \"ADMIN\"",
+									"    };",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedUser1);",
+									"",
+									"    var expectedUser2 = {",
+									"        \"userId\": pm.globals.get(\"customerId1\"),",
+									"        \"name\": \"Alex\",",
+									"        \"role\": \"CUSTOMER\"",
+									"    };",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedUser2);",
+									"",
+									"    var expectedUser3 = {",
+									"        \"userId\": pm.globals.get(\"customerId2\"),",
+									"        \"name\": \"Ivan\",",
+									"        \"role\": \"CUSTOMER\"",
+									"    };",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedUser3);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "tours service tests",
 			"item": [
 				{
@@ -90,6 +302,102 @@
 					"response": []
 				},
 				{
+					"name": "try to create tour not authorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is UNAUTHORIZED\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 7000,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Innsbruck\",\r\n    \"hotelId\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "try to create tour not admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is FORBIDDEN\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{customerId1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 7000,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Innsbruck\",\r\n    \"hotelId\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "create tour 1",
 					"event": [
 						{
@@ -110,7 +418,13 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{adminId}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 7000,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Innsbruck\",\r\n    \"hotelId\": 5\r\n}",
@@ -151,7 +465,7 @@
 									"        \"tourId\": pm.globals.get(\"tourId1\"),",
 									"        \"name\": \"Mountains view\",",
 									"        \"description\": \"You will be skiing in most beautiful mountans in Europe\",",
-									"        \"price\": 3500,",
+									"        \"price\": 7000,",
 									"        \"fromDate\": \"2021-07-15T00:00:00Z\",",
 									"        \"toDate\": \"2021-07-22T00:00:00Z\",",
 									"        \"fromDestination\": \"Moscow\",",
@@ -215,7 +529,13 @@
 					],
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{adminId}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 3500,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Murmansk\",\r\n    \"hotelId\": 5\r\n}",
@@ -324,10 +644,16 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{adminId}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"North Yachting\",\r\n    \"description\": \"You will be yachting in most beautiful fjords in Europe\",\r\n    \"price\": 6800,\r\n    \"fromDate\": \"2021-09-10\",\r\n    \"toDate\": \"2021-09-17\",\r\n    \"fromDestination\": \"Saint Petersburg\",\r\n    \"toDestination\": \"Oslo\",\r\n    \"hotelId\": 5\r\n}",
+							"raw": "{\r\n    \"name\": \"North Yachting\",\r\n    \"description\": \"You will be yachting in most beautiful fjords in Europe\",\r\n    \"price\": 4999,\r\n    \"fromDate\": \"2021-09-10\",\r\n    \"toDate\": \"2021-09-17\",\r\n    \"fromDestination\": \"Saint Petersburg\",\r\n    \"toDestination\": \"Oslo\",\r\n    \"hotelId\": 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -432,7 +758,13 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{adminId}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 3500,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Pskov\",\r\n    \"hotelId\": 5\r\n}",
@@ -524,7 +856,13 @@
 					],
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{adminId}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -585,7 +923,7 @@
 									"        \"price\": 6800,",
 									"        \"fromDate\": \"2021-09-10T00:00:00Z\",",
 									"        \"toDate\": \"2021-09-17T00:00:00Z\",",
-									"        \"fromDestination\": \"Saint Pertersburg\",",
+									"        \"fromDestination\": \"Saint Petersburg\",",
 									"        \"toDestination\": \"Oslo\",",
 									"        \"hotelId\": 5",
 									"    };",
@@ -648,10 +986,16 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{adminId}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 4000,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Zurich\",\r\n    \"hotelId\": 1\r\n}",
+							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountains in Europe\",\r\n    \"price\": 6500,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Zurich\",\r\n    \"hotelId\": 15\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -684,7 +1028,7 @@
 									"});",
 									"",
 									"var jsonData = pm.response.json();",
-									"pm.globals.set(\"tourId1\", jsonData.tourId);",
+									"pm.globals.set(\"tourId5\", jsonData.tourId);",
 									""
 								],
 								"type": "text/javascript"
@@ -693,10 +1037,16 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{adminId}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"City walk\",\r\n    \"description\": \"You will be staying in most beautiful district in Europe\",\r\n    \"price\": 5,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-16\",\r\n    \"fromDestination\": \"Saint Petersburg\",\r\n    \"toDestination\": \"Kupchino\",\r\n    \"hotelId\": 13\r\n}",
+							"raw": "{\r\n    \"name\": \"City walk\",\r\n    \"description\": \"You will be staying in most beautiful district in Europe\",\r\n    \"price\": 5,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-16\",\r\n    \"fromDestination\": \"Saint Petersburg\",\r\n    \"toDestination\": \"Kupchino\",\r\n    \"hotelId\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -733,15 +1083,15 @@
 									"",
 									"    pm.expect(jsonData.length).to.eql(2);",
 									"    var expectedTour1 = {",
-									"        \"tourId\": pm.globals.get(\"tourId1\"),",
+									"        \"tourId\": pm.globals.get(\"tourId5\"),",
 									"        \"name\": \"City walk\",",
-									"        \"description\": \"You will be skiing in most beautiful district in Europe\",",
+									"        \"description\": \"You will be staying in most beautiful district in Europe\",",
 									"        \"price\": 5,",
 									"        \"fromDate\": \"2021-07-15T00:00:00Z\",",
 									"        \"toDate\": \"2021-07-16T00:00:00Z\",",
 									"        \"fromDestination\": \"Saint Petersburg\",",
 									"        \"toDestination\": \"Kupchino\",",
-									"        \"hotelId\": 13",
+									"        \"hotelId\": 1",
 									"    };",
 									"",
 									"    pm.expect(pm.response.json()[0]).to.deep.include(expectedTour1);",
@@ -887,7 +1237,7 @@
 					"response": []
 				},
 				{
-					"name": "try to buy tour all good",
+					"name": "Order 1 -- try to buy tour all good",
 					"event": [
 						{
 							"listen": "test",
@@ -895,7 +1245,11 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"orderId1\", jsonData.orderId);",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -903,10 +1257,16 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{customerId1}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 1\n}",
+							"raw": "{\n    \"tourId\": {{tourId1}}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -928,7 +1288,7 @@
 					"response": []
 				},
 				{
-					"name": "try to buy tour too expensive",
+					"name": "check order 1 completely approved",
 					"event": [
 						{
 							"listen": "test",
@@ -936,18 +1296,37 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check order 1 completely approved\", function () {",
+									"",
+									"    var expectedOrder = {",
+									"        \"orderId\": parseInt(pm.globals.get(\"orderId1\")),",
+									"        \"tourId\": parseInt(pm.globals.get(\"tourId1\")),",
+									"        \"userId\": parseInt(pm.globals.get(\"customerId1\")),",
+									"        \"paymentStatus\": \"APPROVED\",",
+									"        \"flightBookingStatus\": \"APPROVED\",",
+									"        \"hotelBookingStatus\": \"APPROVED\",",
+									"        \"overallStatus\": \"APPROVED\"",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedOrder);",
+									"",
 									"});"
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userId\": 5,\n    \"tourId\": {{tourId4}}\n}",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -969,7 +1348,7 @@
 					"response": []
 				},
 				{
-					"name": "try to buy tour no flight available",
+					"name": "Order 2 -- try to buy tour too expensive",
 					"event": [
 						{
 							"listen": "test",
@@ -977,7 +1356,11 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
-									"});"
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"orderId2\", jsonData.orderId);",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -985,10 +1368,16 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{customerId1}}",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userId\": 5,\n    \"tourId\": {{tourId1}}\n}",
+							"raw": "{\n    \"tourId\": {{tourId4}}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1010,7 +1399,7 @@
 					"response": []
 				},
 				{
-					"name": "try to buy tour no hotel available",
+					"name": "check order 2 rejected because payment rejected",
 					"event": [
 						{
 							"listen": "test",
@@ -1018,7 +1407,186 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {",
 									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check order 2 payment rejected\", function () {",
+									"",
+									"    var expectedOrder = {",
+									"        \"orderId\": parseInt(pm.globals.get(\"orderId2\")),",
+									"        \"tourId\": parseInt(pm.globals.get(\"tourId4\")),",
+									"        \"userId\": parseInt(pm.globals.get(\"customerId1\")),",
+									"        \"paymentStatus\": \"REJECTED\",",
+									"        \"flightBookingStatus\": \"APPROVED\",",
+									"        \"hotelBookingStatus\": \"APPROVED\",",
+									"        \"overallStatus\": \"REJECTED\"",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedOrder);",
+									"",
 									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check order 2 flight booking rolled back",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check flight booking rolled back\", function () {",
+									"",
+									"    var expectedBooking =     {",
+									"        \"flightId\": parseInt(pm.globals.get(\"orderId2\")),",
+									"        \"orderId\": parseInt(pm.globals.get(\"orderId2\")),",
+									"        \"fromDestination\": \"Moscow\",",
+									"        \"toDestination\": \"Zurich\",",
+									"        \"flightStatus\": \"ROLLED_BACK\"",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedBooking);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8084/flights",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8084",
+							"path": [
+								"flights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check order 2 hotel booking rolled back",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check order 2 payment rejected\", function () {",
+									"",
+									"    var expectedBooking =     {",
+									"        \"hotelBookingId\": parseInt(pm.globals.get(\"orderId2\")),",
+									"        \"orderId\": parseInt(pm.globals.get(\"orderId2\")),",
+									"        \"hotelId\": 15,",
+									"        \"hotelBookingStatus\": \"ROLLED_BACK\"",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedBooking);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/hotelsBookings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"hotelsBookings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order 3 -- try to buy tour no flight available",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"orderId3\", jsonData.orderId);",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1026,10 +1594,187 @@
 					],
 					"request": {
 						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{customerId1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": {{tourId2}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check order 3 rejected because flight booking rejected",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check order 3 payment rejected\", function () {",
+									"",
+									"    var expectedOrder = {",
+									"        \"orderId\": parseInt(pm.globals.get(\"orderId3\")),",
+									"        \"tourId\": parseInt(pm.globals.get(\"tourId2\")),",
+									"        \"userId\": parseInt(pm.globals.get(\"customerId1\")),",
+									"        \"paymentStatus\": \"APPROVED\",",
+									"        \"flightBookingStatus\": \"REJECTED\",",
+									"        \"hotelBookingStatus\": \"APPROVED\",",
+									"        \"overallStatus\": \"REJECTED\"",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedOrder);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userId\": 5,\n    \"tourId\": {{tourId4}}\n}",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order 4 -- try to buy tour no hotel available",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"orderId4\", jsonData.orderId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Auth-Request-User",
+								"value": "{{customerId1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tourId\": {{tourId5}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check order 4 rejected because hotel booking rejected",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check order 4 hotel booking rejected\", function () {",
+									"",
+									"    var expectedOrder = {",
+									"        \"orderId\": parseInt(pm.globals.get(\"orderId4\")),",
+									"        \"tourId\": parseInt(pm.globals.get(\"tourId5\")),",
+									"        \"userId\": parseInt(pm.globals.get(\"customerId1\")),",
+									"        \"paymentStatus\": \"APPROVED\",",
+									"        \"flightBookingStatus\": \"APPROVED\",",
+									"        \"hotelBookingStatus\": \"REJECTED\",",
+									"        \"overallStatus\": \"REJECTED\"",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedOrder);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
 							"options": {
 								"raw": {
 									"language": "json"

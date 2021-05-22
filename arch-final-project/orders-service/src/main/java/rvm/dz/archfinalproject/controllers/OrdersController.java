@@ -27,6 +27,7 @@ public class OrdersController {
     private final OrdersRepository ordersRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final RestTemplate restTemplate = new RestTemplate();
+    private final String USER_ID_HEADER = "X-Auth-Request-User";
 
     @Value("${rvm.tours-service.root-url}")
     private String toursServiceWebRootUrl;
@@ -43,11 +44,12 @@ public class OrdersController {
 
     @SneakyThrows
     @PostMapping("/orders")
-    public ResponseEntity createOrder(@RequestBody CreateUpdateOrderRequest request) {
+    public ResponseEntity createOrder(@RequestHeader(USER_ID_HEADER) String userId,
+            @RequestBody CreateUpdateOrderRequest request) {
         OrderEntity createdOrder = ordersRepository.save(
                 OrderEntity.builder()
                         .tourId(request.getTourId())
-                        .userId(request.getUserId())
+                        .userId(Long.valueOf(userId))
                         .paymentStatus(OrderEntity.Status.PENDING)
                         .flightBookingStatus(OrderEntity.Status.PENDING)
                         .hotelBookingStatus(OrderEntity.Status.PENDING)

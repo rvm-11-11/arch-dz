@@ -14,7 +14,4 @@ public class CreateUpdateOrderRequest {
     @JsonProperty
     private Long tourId;
 
-    @JsonProperty
-    private Long userId;
-
 }

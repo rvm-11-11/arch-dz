@@ -113,7 +113,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 3500,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Innsbruck\",\r\n    \"hotelId\": 5\r\n}",
+							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 7000,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Innsbruck\",\r\n    \"hotelId\": 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -651,7 +651,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 9000,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Innsbruck\",\r\n    \"hotelId\": 7\r\n}",
+							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 4000,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Zurich\",\r\n    \"hotelId\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -696,7 +696,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"City walk\",\r\n    \"description\": \"You will be skiing in most beautiful district in Europe\",\r\n    \"price\": 5,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-16\",\r\n    \"fromDestination\": \"Saint Petersburg\",\r\n    \"toDestination\": \"Kupchino\",\r\n    \"hotelId\": 13\r\n}",
+							"raw": "{\r\n    \"name\": \"City walk\",\r\n    \"description\": \"You will be staying in most beautiful district in Europe\",\r\n    \"price\": 5,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-16\",\r\n    \"fromDestination\": \"Saint Petersburg\",\r\n    \"toDestination\": \"Kupchino\",\r\n    \"hotelId\": 13\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -829,12 +829,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/health",
+							"raw": "http://localhost:8082/health",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8082",
 							"path": [
 								"health"
 							]
@@ -906,7 +906,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -929,6 +929,88 @@
 				},
 				{
 					"name": "try to buy tour too expensive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": {{tourId4}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "try to buy tour no flight available",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": {{tourId1}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "try to buy tour no hotel available",
 					"event": [
 						{
 							"listen": "test",
@@ -992,12 +1074,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/health",
+							"raw": "http://localhost:8083/health",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8081",
+							"port": "8083",
 							"path": [
 								"health"
 							]
@@ -1044,6 +1126,168 @@
 							"port": "8083",
 							"path": [
 								"payments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "flights service",
+			"item": [
+				{
+					"name": "health check flights service",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8084/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8084",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all flights",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8084/flights",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8084",
+							"path": [
+								"flights"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "hotels service",
+			"item": [
+				{
+					"name": "health check hotels service",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all hotel bookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/hotelsBookings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"hotelsBookings"
 							]
 						}
 					},

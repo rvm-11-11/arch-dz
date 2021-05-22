@@ -1,0 +1,1055 @@
+{
+	"info": {
+		"_postman_id": "304b499c-fbe5-4502-b068-681332ead390",
+		"name": "Arch Final Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "tours service tests",
+			"item": [
+				{
+					"name": "health check tours service",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check no tours yet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check no tours yet\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create tour 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"tourId1\", jsonData.tourId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 3500,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Innsbruck\",\r\n    \"hotelId\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check tour 1 created",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check tour1 created\", function () {",
+									"",
+									"    var expectedTour = {",
+									"        \"tourId\": pm.globals.get(\"tourId1\"),",
+									"        \"name\": \"Mountains view\",",
+									"        \"description\": \"You will be skiing in most beautiful mountans in Europe\",",
+									"        \"price\": 3500,",
+									"        \"fromDate\": \"2021-07-15T00:00:00Z\",",
+									"        \"toDate\": \"2021-07-22T00:00:00Z\",",
+									"        \"fromDestination\": \"Moscow\",",
+									"        \"toDestination\": \"Innsbruck\",",
+									"        \"hotelId\": 5",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedTour);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours/{{tourId1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours",
+								"{{tourId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update tour 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 3500,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Murmansk\",\r\n    \"hotelId\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours/{{tourId1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours",
+								"{{tourId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check tour 1 updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check tour1 created\", function () {",
+									"",
+									"    var expectedTour = {",
+									"        \"tourId\": pm.globals.get(\"tourId1\"),",
+									"        \"name\": \"Mountains view\",",
+									"        \"description\": \"You will be skiing in most beautiful mountans in Europe\",",
+									"        \"price\": 3500,",
+									"        \"fromDate\": \"2021-07-15T00:00:00Z\",",
+									"        \"toDate\": \"2021-07-22T00:00:00Z\",",
+									"        \"fromDestination\": \"Moscow\",",
+									"        \"toDestination\": \"Murmansk\",",
+									"        \"hotelId\": 5",
+									"    };",
+									"    ",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedTour);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours/{{tourId1}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours",
+								"{{tourId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create tour 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"tourId2\", jsonData.tourId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"North Yachting\",\r\n    \"description\": \"You will be yachting in most beautiful fjords in Europe\",\r\n    \"price\": 6800,\r\n    \"fromDate\": \"2021-09-10\",\r\n    \"toDate\": \"2021-09-17\",\r\n    \"fromDestination\": \"Saint Petersburg\",\r\n    \"toDestination\": \"Oslo\",\r\n    \"hotelId\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check tour 2 created",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check tour 2 created\", function () {",
+									"",
+									"    var expectedTour = {",
+									"        \"tourId\": pm.globals.get(\"tourId2\"),",
+									"        \"name\": \"North Yachting\",",
+									"        \"description\": \"You will be yachting in most beautiful fjords in Europe\",",
+									"        \"price\": 6800,",
+									"        \"fromDate\": \"2021-09-10T00:00:00Z\",",
+									"        \"toDate\": \"2021-09-17T00:00:00Z\",",
+									"        \"fromDestination\": \"Saint Petersburg\",",
+									"        \"toDestination\": \"Oslo\",",
+									"        \"hotelId\": 5",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedTour);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours/{{tourId2}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours",
+								"{{tourId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create tour 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"tourId3\", jsonData.tourId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 3500,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Pskov\",\r\n    \"hotelId\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check 3 tours exist already",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check 3 tours exist already\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.length).to.eql(3);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete tour 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours/{{tourId3}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours",
+								"{{tourId3}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check only 2 tours left",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check 2 tours left\", function () {",
+									"    var jsonData = pm.response.json();",
+									"",
+									"    pm.expect(jsonData.length).to.eql(2);",
+									"    var expectedTour1 = {",
+									"        \"tourId\": pm.globals.get(\"tourId1\"),",
+									"        \"name\": \"Mountains view\",",
+									"        \"description\": \"You will be skiing in most beautiful mountans in Europe\",",
+									"        \"price\": 3500,",
+									"        \"fromDate\": \"2021-07-15T00:00:00Z\",",
+									"        \"toDate\": \"2021-07-22T00:00:00Z\",",
+									"        \"fromDestination\": \"Moscow\",",
+									"        \"toDestination\": \"Murmansk\",",
+									"        \"hotelId\": 5",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedTour1);",
+									"",
+									"    var expectedTour2 = {",
+									"        \"tourId\": pm.globals.get(\"tourId2\"),",
+									"        \"name\": \"North Yachting\",",
+									"        \"description\": \"You will be yachting in most beautiful fjords in Europe\",",
+									"        \"price\": 6800,",
+									"        \"fromDate\": \"2021-09-10T00:00:00Z\",",
+									"        \"toDate\": \"2021-09-17T00:00:00Z\",",
+									"        \"fromDestination\": \"Saint Pertersburg\",",
+									"        \"toDestination\": \"Oslo\",",
+									"        \"hotelId\": 5",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedTour2);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create tour 4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"tourId4\", jsonData.tourId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mountains view\",\r\n    \"description\": \"You will be skiing in most beautiful mountans in Europe\",\r\n    \"price\": 9000,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-22\",\r\n    \"fromDestination\": \"Moscow\",\r\n    \"toDestination\": \"Innsbruck\",\r\n    \"hotelId\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create tour 5",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"tourId1\", jsonData.tourId);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"City walk\",\r\n    \"description\": \"You will be skiing in most beautiful district in Europe\",\r\n    \"price\": 5,\r\n    \"fromDate\": \"2021-07-15\",\r\n    \"toDate\": \"2021-07-16\",\r\n    \"fromDestination\": \"Saint Petersburg\",\r\n    \"toDestination\": \"Kupchino\",\r\n    \"hotelId\": 13\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/tours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"tours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check tours filtered and sorted properly",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check 2 tours returned sorted and filtering applied\", function () {",
+									"    var jsonData = pm.response.json();",
+									"",
+									"    pm.expect(jsonData.length).to.eql(2);",
+									"    var expectedTour1 = {",
+									"        \"tourId\": pm.globals.get(\"tourId1\"),",
+									"        \"name\": \"City walk\",",
+									"        \"description\": \"You will be skiing in most beautiful district in Europe\",",
+									"        \"price\": 5,",
+									"        \"fromDate\": \"2021-07-15T00:00:00Z\",",
+									"        \"toDate\": \"2021-07-16T00:00:00Z\",",
+									"        \"fromDestination\": \"Saint Petersburg\",",
+									"        \"toDestination\": \"Kupchino\",",
+									"        \"hotelId\": 13",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()[0]).to.deep.include(expectedTour1);",
+									"",
+									"    var expectedTour2 = {",
+									"        \"tourId\": pm.globals.get(\"tourId2\"),",
+									"        \"name\": \"North Yachting\",",
+									"        \"description\": \"You will be yachting in most beautiful fjords in Europe\",",
+									"        \"price\": 6800,",
+									"        \"fromDate\": \"2021-09-10T00:00:00Z\",",
+									"        \"toDate\": \"2021-09-17T00:00:00Z\",",
+									"        \"fromDestination\": \"Saint Petersburg\",",
+									"        \"toDestination\": \"Oslo\",",
+									"        \"hotelId\": 5",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()[1]).to.deep.include(expectedTour2);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/toursSearchFilter?orderField=price&fromDestination=Saint%20Petersburg",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"toursSearchFilter"
+							],
+							"query": [
+								{
+									"key": "orderField",
+									"value": "price"
+								},
+								{
+									"key": "fromDestination",
+									"value": "Saint%20Petersburg"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orders service tests",
+			"item": [
+				{
+					"name": "health check orders service",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "try to buy tour all good",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "try to buy tour too expensive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": {{tourId4}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "payments service test",
+			"item": [
+				{
+					"name": "health check payments service",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all payments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/payments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"payments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

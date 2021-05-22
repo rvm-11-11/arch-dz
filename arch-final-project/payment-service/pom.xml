@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>rvm.dz</groupId>
-	<artifactId>orders</artifactId>
+	<artifactId>payment</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>orders</name>
-	<description>Arch final project: Orders Service</description>
+	<name>payment</name>
+	<description>Arch final project: Payments Service</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

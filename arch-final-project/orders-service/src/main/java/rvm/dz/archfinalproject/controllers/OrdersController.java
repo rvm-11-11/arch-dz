@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -17,6 +18,7 @@ import rvm.dz.archfinalproject.repositories.OrdersRepository;
 import rvm.dz.archfinalproject.repositories.TourResponse;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -46,6 +48,13 @@ public class OrdersController {
     @PostMapping("/orders")
     public ResponseEntity createOrder(@RequestHeader(USER_ID_HEADER) String userId,
             @RequestBody CreateUpdateOrderRequest request) {
+        Optional<OrderEntity> sameOrder = ordersRepository
+                .findByUserIdAndTourId(Long.valueOf(userId), request.getTourId());
+        if (sameOrder.isPresent()) {
+            return ResponseEntity.status( HttpStatus.CONFLICT).body(
+                    Map.of("sameOrderExistedBefore", sameOrder.get()) );
+        }
+
         OrderEntity createdOrder = ordersRepository.save(
                 OrderEntity.builder()
                         .tourId(request.getTourId())

@@ -6,6 +6,470 @@
 	},
 	"item": [
 		{
+			"name": "reset all",
+			"item": [
+				{
+					"name": "reset tours",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/resetTours",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"resetTours"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/resetUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"resetUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset payments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/resetPayments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"resetPayments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset payments Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/resetOrders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"resetOrders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset flights bookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8084/resetFlights",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8084",
+							"path": [
+								"resetFlights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset hotels bookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8085/resetHotelsBookings",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"resetHotelsBookings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset successful orders",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 15,\r\n    \"itemId\": 41,\r\n    \"price\": 3500,\r\n    \"deliveryDate\": \"2021-05-15\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/resetSuccessfulOrders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"resetSuccessfulOrders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "health check all",
+			"item": [
+				{
+					"name": "health check tours service Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "health check orders service Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "health check payments service Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "health check flights service Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8084/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8084",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "health check hotels service Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8085/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "users management",
 			"item": [
 				{
@@ -253,7 +717,7 @@
 					"response": []
 				},
 				{
-					"name": "check no tours yet",
+					"name": "check no tours yet Copy",
 					"event": [
 						{
 							"listen": "test",
@@ -691,7 +1155,7 @@
 									"        \"tourId\": pm.globals.get(\"tourId2\"),",
 									"        \"name\": \"North Yachting\",",
 									"        \"description\": \"You will be yachting in most beautiful fjords in Europe\",",
-									"        \"price\": 6800,",
+									"        \"price\": 4999,",
 									"        \"fromDate\": \"2021-09-10T00:00:00Z\",",
 									"        \"toDate\": \"2021-09-17T00:00:00Z\",",
 									"        \"fromDestination\": \"Saint Petersburg\",",
@@ -920,7 +1384,7 @@
 									"        \"tourId\": pm.globals.get(\"tourId2\"),",
 									"        \"name\": \"North Yachting\",",
 									"        \"description\": \"You will be yachting in most beautiful fjords in Europe\",",
-									"        \"price\": 6800,",
+									"        \"price\": 4999,",
 									"        \"fromDate\": \"2021-09-10T00:00:00Z\",",
 									"        \"toDate\": \"2021-09-17T00:00:00Z\",",
 									"        \"fromDestination\": \"Saint Petersburg\",",
@@ -1100,7 +1564,7 @@
 									"        \"tourId\": pm.globals.get(\"tourId2\"),",
 									"        \"name\": \"North Yachting\",",
 									"        \"description\": \"You will be yachting in most beautiful fjords in Europe\",",
-									"        \"price\": 6800,",
+									"        \"price\": 4999,",
 									"        \"fromDate\": \"2021-09-10T00:00:00Z\",",
 									"        \"toDate\": \"2021-09-17T00:00:00Z\",",
 									"        \"fromDestination\": \"Saint Petersburg\",",
@@ -1838,6 +2302,73 @@
 							"port": "8082",
 							"path": [
 								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check successfulOrders search index updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check successful order index updated\", function () {",
+									"",
+									"    var expectedOrder =     {",
+									"        \"successfulOrderId\": ",
+									"        parseInt(pm.globals.get(\"tourId5\")) + 1,",
+									"        \"tourId\": parseInt(pm.globals.get(\"tourId1\")),",
+									"        \"tourName\": \"Mountains view\",",
+									"        \"tourDescription\": \"You will be skiing in most beautiful mountans in Europe\",",
+									"        \"price\": 3500,",
+									"        \"fromDate\": \"2021-07-15T00:00:00Z\",",
+									"        \"toDate\": \"2021-07-22T00:00:00Z\",",
+									"        \"fromDestination\": \"Moscow\",",
+									"        \"toDestination\": \"Murmansk\",",
+									"        \"hotelId\": 5,",
+									"        \"userId\": parseInt(pm.globals.get(\"customerId1\")),",
+									"        \"userName\": \"Alex\",",
+									"        \"overallOrderStatus\": \"APPROVED\"",
+									"    };",
+									"",
+									"    pm.expect(pm.response.json()).to.deep.include(expectedOrder);",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": 5,\n    \"tourId\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/successfulOrders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"successfulOrders"
 							]
 						}
 					},

@@ -143,6 +143,13 @@ public class ToursController {
         }
     }
 
+    @PostMapping("/resetTours")
+    public String resetTours() {
+        log.info("Calling resetOrders()");
+        toursRepository.deleteAll();
+        return "All tours removed";
+    }
+
     @RequestMapping("/health")
     public Map<String, String> health() {
         log.info("Calling health()");

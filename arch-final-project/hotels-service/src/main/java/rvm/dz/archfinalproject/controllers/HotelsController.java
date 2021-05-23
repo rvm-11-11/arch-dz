@@ -88,8 +88,15 @@ public class HotelsController {
     }
 
     @GetMapping("/hotelsBookings")
-    public ResponseEntity getAllFlights() {
+    public ResponseEntity getAllHotelsBookings() {
         return ResponseEntity.ok(hotelsRepository.findAll());
+    }
+
+    @PostMapping("/resetHotelsBookings")
+    public String resetHotelsBookings() {
+        log.info("Calling resetHotelsBookings()");
+        hotelsRepository.deleteAll();
+        return "All HotelsBookings removed";
     }
 
     @RequestMapping("/health")

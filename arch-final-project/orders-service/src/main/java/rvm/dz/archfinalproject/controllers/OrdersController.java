@@ -165,15 +165,38 @@ public class OrdersController {
         }
     }
 
+    @SneakyThrows
     private void checkIfAllPartsApproved(OrderEntity order) {
         if(order.getPaymentStatus() == OrderEntity.Status.APPROVED
                 && order.getFlightBookingStatus() == OrderEntity.Status.APPROVED
                 && order.getHotelBookingStatus() == OrderEntity.Status.APPROVED) {
             order.setOverallStatus(OrderEntity.Status.APPROVED);
             ordersRepository.save(order);
+
+
+            Map<String, String> eventDataMap = Map.of(
+                    "tourId", order.getTourId().toString(),
+                    "userId", order.getUserId().toString()
+            );
+
+            Event event = Event.builder()
+                    .orderId(order.getOrderId())
+                    .eventType(Event.EventType.ORDER_OVERALL_APPROVED)
+                    .eventData(eventDataMap)
+                    .build();
+
+            this.template.send( "travel-agency-events", objectMapper.writeValueAsString(event));
+
             log.info("Order executed successfully!");
         }
 
+    }
+
+    @PostMapping("/resetOrders")
+    public String resetOrders() {
+        log.info("Calling resetOrders()");
+        ordersRepository.deleteAll();
+        return "All orders removed";
     }
 
     @RequestMapping("/health")

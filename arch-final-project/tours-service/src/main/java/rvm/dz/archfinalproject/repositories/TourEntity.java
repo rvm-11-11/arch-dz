@@ -42,16 +42,13 @@ public class TourEntity {
   private Instant toDate;
 
   @JsonProperty
-  private String fromDestination; //TODO enum?
+  private String fromDestination;
 
   @JsonProperty
-  private String toDestination;  //TODO enum?
+  private String toDestination;
 
   @JsonProperty
-  private Long hotelId; //TODO enum?
-
-//  @JsonProperty
-//  private enum meals; //TODO enum?
+  private Long hotelId;
 
 }
 

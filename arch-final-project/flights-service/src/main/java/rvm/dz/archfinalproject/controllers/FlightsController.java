@@ -96,6 +96,13 @@ public class FlightsController {
         return ResponseEntity.ok(flightsRepository.findAll());
     }
 
+    @PostMapping("/resetFlights")
+    public String resetFlights() {
+        log.info("Calling resetFlights()");
+        flightsRepository.deleteAll();
+        return "All Flights removed";
+    }
+
     @RequestMapping("/health")
     public Map<String, String> health() {
         log.info("Calling health()");

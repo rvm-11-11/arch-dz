@@ -38,4 +38,12 @@ public class UsersController {
 
         return ResponseEntity.ok( Map.of("userId", createdUser.getUserId()) );
     }
+
+    @PostMapping("/resetUsers")
+    public String resetUsers() {
+        log.info("Calling resetUsers()");
+        usersRepository.deleteAll();
+        return "All users removed";
+    }
+
 }

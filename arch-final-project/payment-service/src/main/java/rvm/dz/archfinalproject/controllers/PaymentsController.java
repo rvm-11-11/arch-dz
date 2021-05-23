@@ -93,6 +93,13 @@ public class PaymentsController {
         return ResponseEntity.ok(paymentRepository.findAll());
     }
 
+    @PostMapping("/resetPayments")
+    public String resetPayments() {
+        log.info("Calling resetPayments()");
+        paymentRepository.deleteAll();
+        return "All Payments removed";
+    }
+
     @RequestMapping("/health")
     public Map<String, String> health() {
         log.info("Calling health()");

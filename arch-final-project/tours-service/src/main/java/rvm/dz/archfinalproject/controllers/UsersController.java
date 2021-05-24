@@ -39,7 +39,7 @@ public class UsersController {
         return ResponseEntity.ok( Map.of("userId", createdUser.getUserId()) );
     }
 
-    @PostMapping("/resetUsers")
+    @PostMapping("/users/reset")
     public String resetUsers() {
         log.info("Calling resetUsers()");
         usersRepository.deleteAll();

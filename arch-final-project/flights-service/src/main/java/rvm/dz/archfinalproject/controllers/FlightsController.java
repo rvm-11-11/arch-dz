@@ -96,7 +96,7 @@ public class FlightsController {
         return ResponseEntity.ok(flightsRepository.findAll());
     }
 
-    @PostMapping("/resetFlights")
+    @PostMapping("/flights/reset")
     public String resetFlights() {
         log.info("Calling resetFlights()");
         flightsRepository.deleteAll();

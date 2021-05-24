@@ -93,7 +93,7 @@ public class PaymentsController {
         return ResponseEntity.ok(paymentRepository.findAll());
     }
 
-    @PostMapping("/resetPayments")
+    @PostMapping("/payments/reset")
     public String resetPayments() {
         log.info("Calling resetPayments()");
         paymentRepository.deleteAll();

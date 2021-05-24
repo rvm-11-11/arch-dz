@@ -192,7 +192,7 @@ public class OrdersController {
 
     }
 
-    @PostMapping("/resetOrders")
+    @PostMapping("/orders/reset")
     public String resetOrders() {
         log.info("Calling resetOrders()");
         ordersRepository.deleteAll();

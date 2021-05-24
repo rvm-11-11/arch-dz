@@ -21,3 +21,28 @@ Producer:
 Consumer:
 
   bin/kafka-console-consumer.sh --topic travel-agency-events --from-beginning --bootstrap-server localhost:9092
+
+
+### Docker
+
+  docker login
+
+  ./mvnw package
+  docker build --tag rvm1111/arch:final-project-tours-v1 .
+  docker push rvm1111/arch:final-project-tours-v1
+
+  ./mvnw package
+  docker build --tag rvm1111/arch:final-project-orders-v1 .
+  docker push rvm1111/arch:final-project-orders-v1
+
+  ./mvnw package
+  docker build --tag rvm1111/arch:final-project-payments-v1 .
+  docker push rvm1111/arch:final-project-payments-v1
+
+  ./mvnw package
+  docker build --tag rvm1111/arch:final-project-hotels-v1 .
+  docker push rvm1111/arch:final-project-hotels-v1
+
+  ./mvnw package
+  docker build --tag rvm1111/arch:final-project-flights-v1 .
+  docker push rvm1111/arch:final-project-flights-v1

@@ -92,7 +92,7 @@ public class HotelsController {
         return ResponseEntity.ok(hotelsRepository.findAll());
     }
 
-    @PostMapping("/resetHotelsBookings")
+    @PostMapping("/hotelsBookings/reset")
     public String resetHotelsBookings() {
         log.info("Calling resetHotelsBookings()");
         hotelsRepository.deleteAll();

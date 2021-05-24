@@ -31,7 +31,7 @@ public class ToursController {
     private final String USER_ID_HEADER = "X-Auth-Request-User";
 
 
-    @GetMapping("/toursSearchFilter") //TODO can be CQRS
+    @GetMapping("/tours/SearchFilter")
     public ResponseEntity toursSearch(@RequestParam(required = false) String orderField,
                                        @RequestParam(required = false) String fromDestination) {
         List<TourEntity> filteredList = toursRepository.findAll().stream().filter(tour -> {
@@ -143,9 +143,9 @@ public class ToursController {
         }
     }
 
-    @PostMapping("/resetTours")
+    @PostMapping("/tours/reset")
     public String resetTours() {
-        log.info("Calling resetOrders()");
+        log.info("Calling resetTours()");
         toursRepository.deleteAll();
         return "All tours removed";
     }

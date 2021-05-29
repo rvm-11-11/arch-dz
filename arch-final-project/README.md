@@ -46,3 +46,17 @@ Consumer:
   ./mvnw package
   docker build --tag rvm1111/arch:final-project-flights-v1 .
   docker push rvm1111/arch:final-project-flights-v1
+
+### k8s
+
+  minikube start
+  kubectl get namespaces
+  kubectl create namespace final-project
+  kubectl config set-context --current --namespace=final-project
+  watch kubectl get all
+
+  helm uninstall my-release bitnami/kafka
+  helm install my-release bitnami/kafka
+
+  kubectl delete -f ./k8s/.
+  kubectl apply -f ./k8s/.

@@ -53,7 +53,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rvm-final-project-flights-service
+  name: rvm-final-project-hotels-service
 spec:
   selector:
     app: final-project-hotels

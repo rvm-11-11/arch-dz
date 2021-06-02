@@ -19,7 +19,7 @@ spec:
           image: rvm1111/arch:final-project-tours-v1
           env:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-              value: my-release-kafka.streams.svc.cluster.local:9092
+              value: my-release-kafka.final-project.svc.cluster.local:9092
           ports:
             - name: web
               containerPort: 8081
@@ -58,7 +58,7 @@ spec:
           image: rvm1111/arch:final-project-orders-v1
           env:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-              value: my-release-kafka.streams.svc.cluster.local:9092
+              value: my-release-kafka.final-project.svc.cluster.local:9092
             - name: RVM_TOURS_SERVICE_ROOT_URL
               value: http://rvm-final-project-tours-service:8080
           ports:
@@ -99,7 +99,7 @@ spec:
           image: rvm1111/arch:final-project-payments-v1
           env:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-              value: my-release-kafka.streams.svc.cluster.local:9092
+              value: my-release-kafka.final-project.svc.cluster.local:9092
           ports:
             - name: web
               containerPort: 8083
@@ -138,7 +138,7 @@ spec:
           image: rvm1111/arch:final-project-flights-v1
           env:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-              value: my-release-kafka.streams.svc.cluster.local:9092
+              value: my-release-kafka.final-project.svc.cluster.local:9092
           ports:
             - name: web
               containerPort: 8084
@@ -177,7 +177,7 @@ spec:
           image: rvm1111/arch:final-project-hotels-v1
           env:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-              value: my-release-kafka.streams.svc.cluster.local:9092
+              value: my-release-kafka.final-project.svc.cluster.local:9092
           ports:
             - name: web
               containerPort: 8085

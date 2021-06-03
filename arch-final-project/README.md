@@ -171,7 +171,12 @@ helm install final-project-chart ./final-project-chart
   helm create final-project-chart
   helm uninstall final-project
   helm install final-project ./final-project-chart --dry-run  > debug-helm.txt
+  
   helm install final-project ./final-project-chart
 
   helm dependency update ./final-project-chart
   kubectl get serviceaccount
+
+  helm upgrade final-project ./final-project-chart
+
+  kubectl logs ingress-nginx-controller-799c9469f7-zmflx  -n=kube-system

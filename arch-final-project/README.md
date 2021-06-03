@@ -132,6 +132,7 @@ Consumer:
 
   helm uninstall my-release bitnami/kafka
   helm install my-release bitnami/kafka
+  helm upgrade my-release bitnami/kafka
 
   kubectl delete -f ./k8s/my-app/.
   kubectl apply -f ./k8s/my-app/.
@@ -139,3 +140,38 @@ Consumer:
   kubectl apply -f ./k8s/keycloak/.
 
   kubectl logs service/rvm-final-project-flights-service
+
+
+### Use helm chart from DZ5
+
+Admin tool does not work -- mixed content and CSP violation
+
+https://stackoverflow.com/questions/18321032/how-to-get-chrome-to-allow-mixed-content -- does not really help here because it also violates CSP
+
+but I can access it via weird service port, that is cool!
+http://192.168.49.2:32281/auth/admin/master/console/#/realms/myrealm/users
+
+helm uninstall dz5-chart ./dz5-chart
+
+helm create final-project-chart
+helm uninstall final-project-chart
+helm dependency update ./final-project-chart
+helm upgrade final-project-chart ./final-project-chart
+
+helm install final-project-chart ./final-project-chart --dry-run  > debug-helm.txt
+
+helm install dz55-chart ./dz5-chart --dry-run > debug-helm.txt
+
+helm install final-project-chart ./final-project-chart
+
+
+
+### Create new chart
+
+  helm create final-project-chart
+  helm uninstall final-project
+  helm install final-project ./final-project-chart --dry-run  > debug-helm.txt
+  helm install final-project ./final-project-chart
+
+  helm dependency update ./final-project-chart
+  kubectl get serviceaccount

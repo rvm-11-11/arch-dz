@@ -35,21 +35,23 @@ spec:
           env:
             - name: KEYCLOAK_HOST
               value: http://final-project-keyclo
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.final-project.svc.cluster.local:9092
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: 8081
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
           readinessProbe:
             httpGet:
               path: /health
               port: http
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

@@ -182,3 +182,18 @@ helm install final-project-chart ./final-project-chart
   helm upgrade final-project ./final-project-chart
 
   kubectl logs ingress-nginx-controller-799c9469f7-zmflx  -n=kube-system
+
+### Deploy IdP integrated version into k8s
+
+  ./mvnw package
+  docker build --tag rvm1111/arch:final-project-tours-v2 .
+  docker push rvm1111/arch:final-project-tours-v2
+
+  helm uninstall final-project
+  helm install final-project ./final-project-chart
+
+  kubectl logs service/final-project-final-project-chart
+  kubectl logs pod/my-release-kafka-0  
+
+
+  https://arch.homework/otusapp/romanov/users/my-id

@@ -28,6 +28,7 @@ public class UsersController {
 
     private final UsersRepository usersRepository;
     private final RegistrationUseCase useCase;
+    private final String USER_ID_HEADER = "X-Auth-Request-User";
 
     @PostMapping("/users/register")
     public ResponseEntity register(@RequestBody CreateUpdateUserRequest request) {
@@ -44,6 +45,11 @@ public class UsersController {
         return useCase.register(input).toResponseEntity();
     }
 
+    @GetMapping("/users/my-id")
+    public ResponseEntity register(@RequestHeader(USER_ID_HEADER) String userId) {
+        log.info("/users/my-id: {}", userId);
+        return ResponseEntity.ok( Map.of("userId", userId));
+    }
 
     @GetMapping("/users")
     public ResponseEntity getAllUsers() {

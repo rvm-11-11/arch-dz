@@ -64,7 +64,7 @@ ingress:
 #      kubernetes.io/ingress.class: nginx
     hosts:
       - host: arch.homework
-        paths: [ path: '/otusapp/romanov($|/)(register)', path: '/otusapp/romanov($|/)(health)', path: '/otusapp/romanov($|/)(version)']
+        paths: [ path: '/otusapp/romanov($|/)(users/register)', path: '/otusapp/romanov($|/)(health)', path: '/otusapp/romanov($|/)(version)']
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

@@ -54,8 +54,8 @@ public class SuccessfulOrderEntity {
     @JsonProperty
     private String userId;
 
-    @JsonProperty
-    private String userName;
+//    @JsonProperty
+//    private String userName;
 
     @JsonProperty
     private Status overallOrderStatus;

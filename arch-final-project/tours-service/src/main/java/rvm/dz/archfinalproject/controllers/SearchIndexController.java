@@ -47,7 +47,7 @@ public class SearchIndexController {
             Optional<TourEntity> tourEntityOptional =
                     toursRepository.findById(parseLong(event.getEventData().get("tourId")));
             Optional<UserEntity> userEntityOptional =
-                    usersRepository.findById(parseLong(event.getEventData().get("userId")));
+                    usersRepository.findById(event.getEventData().get("userId"));
 
             successfulOrdersRepository.save(SuccessfulOrderEntity
                     .builder()

@@ -90,7 +90,7 @@ public class ToursController {
 
     private boolean isUserNotAdmin(String userId) {
         return ! usersRepository
-                .findById(Long.valueOf(userId))
+                .findById(userId)
                 .filter(userEntity -> userEntity.getRole().equals(UserEntity.Role.ADMIN)).isPresent();
     }
 

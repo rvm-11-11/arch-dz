@@ -38,6 +38,6 @@ public class RegistrationUseCase {
         );
 
 
-        return new OkResponse(createdUser.getUserId());
+        return new OkResponse(Map.of("userId", createdUser.getUserId()));
     }
 }

@@ -49,7 +49,7 @@ public class OrdersController {
     public ResponseEntity createOrder(@RequestHeader(USER_ID_HEADER) String userId,
             @RequestBody CreateUpdateOrderRequest request) {
         Optional<OrderEntity> sameOrder = ordersRepository
-                .findByUserIdAndTourId(Long.valueOf(userId), request.getTourId());
+                .findByUserIdAndTourId(userId, request.getTourId());
         if (sameOrder.isPresent()) {
             return ResponseEntity.status( HttpStatus.CONFLICT).body(
                     Map.of("sameOrderExistedBefore", sameOrder.get()) );
@@ -58,7 +58,7 @@ public class OrdersController {
         OrderEntity createdOrder = ordersRepository.save(
                 OrderEntity.builder()
                         .tourId(request.getTourId())
-                        .userId(Long.valueOf(userId))
+                        .userId(userId)
                         .paymentStatus(OrderEntity.Status.PENDING)
                         .flightBookingStatus(OrderEntity.Status.PENDING)
                         .hotelBookingStatus(OrderEntity.Status.PENDING)

@@ -28,7 +28,7 @@ public class OrderEntity {
   private Long tourId;
 
   @JsonProperty
-  private Long userId;
+  private String userId;
 
   @JsonProperty
   private Status paymentStatus;

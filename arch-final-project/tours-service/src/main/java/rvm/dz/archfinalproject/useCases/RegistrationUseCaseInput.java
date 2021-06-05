@@ -1,20 +1,14 @@
-package rvm.dz.archfinalproject.controllers;
+package rvm.dz.archfinalproject.useCases;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import rvm.dz.archfinalproject.repositories.UserEntity;
-
-import java.util.Date;
 
 @RequiredArgsConstructor
 @Data
-public class CreateUpdateUserRequest {
-
-    private String name;
-
-    private UserEntity.Role role;
+@Builder
+public class RegistrationUseCaseInput {
 
     final String username;
 
@@ -26,4 +20,5 @@ public class CreateUpdateUserRequest {
 
     final String password;
 
+    final UserEntity.Role role;
 }

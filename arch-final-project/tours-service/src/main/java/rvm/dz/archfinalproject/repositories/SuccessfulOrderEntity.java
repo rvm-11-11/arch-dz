@@ -52,7 +52,7 @@ public class SuccessfulOrderEntity {
     private Long hotelId;
 
     @JsonProperty
-    private Long userId;
+    private String userId;
 
     @JsonProperty
     private String userName;

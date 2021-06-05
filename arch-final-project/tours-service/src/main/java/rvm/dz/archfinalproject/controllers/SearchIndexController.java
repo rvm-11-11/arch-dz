@@ -60,8 +60,8 @@ public class SearchIndexController {
                     .fromDestination(tourEntityOptional.map(TourEntity::getFromDestination).orElse(""))
                     .toDestination(tourEntityOptional.map(TourEntity::getToDestination).orElse(""))
                     .hotelId(tourEntityOptional.map(TourEntity::getHotelId).orElse(-1L))
-                    .userId(userEntityOptional.map(UserEntity::getUserId).orElse(-1L))
-                    .userName(userEntityOptional.map(UserEntity::getName).orElse(""))
+                    .userId(userEntityOptional.map(UserEntity::getUserId).orElse(""))
+//                    .userName(userEntityOptional.map(UserEntity::getName).orElse(""))
                     .overallOrderStatus(SuccessfulOrderEntity.Status.APPROVED)
                     .build());
         }

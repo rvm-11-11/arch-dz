@@ -2,6 +2,8 @@
 
 ### Kafka
 
+  cd /home/superuser/Documents/tmp/kafka_2.13-2.7.0
+
   bin/zookeeper-server-start.sh config/zookeeper.properties
 
   bin/kafka-server-start.sh config/server.properties
@@ -171,7 +173,7 @@ helm install final-project-chart ./final-project-chart
   helm create final-project-chart
   helm uninstall final-project
   helm install final-project ./final-project-chart --dry-run  > debug-helm.txt
-  
+
   helm install final-project ./final-project-chart
 
   helm dependency update ./final-project-chart

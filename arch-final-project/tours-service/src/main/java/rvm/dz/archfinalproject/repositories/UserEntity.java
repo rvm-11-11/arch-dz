@@ -21,11 +21,7 @@ public class UserEntity {
 
   @Id
   @JsonProperty
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long userId;
-
-  @JsonProperty
-  private String name;
+  private String userId;
 
   @JsonProperty
   private Role role;

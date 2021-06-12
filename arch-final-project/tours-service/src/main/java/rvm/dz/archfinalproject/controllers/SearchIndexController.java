@@ -77,7 +77,7 @@ public class SearchIndexController {
     @PostMapping("/successfulOrders/reset")
     public String resetSuccessfulOrders() {
         log.info("Calling resetSuccessfulOrders()");
-        toursRepository.deleteAll();
+        successfulOrdersRepository.deleteAll();
         return "All successfulOrders removed";
     }
 

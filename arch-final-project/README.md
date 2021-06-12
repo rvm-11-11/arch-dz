@@ -186,8 +186,8 @@ helm install final-project-chart ./final-project-chart
 ### Deploy IdP integrated version into k8s
 
   ./mvnw package
-  docker build --tag rvm1111/arch:final-project-tours-v2 .
-  docker push rvm1111/arch:final-project-tours-v2
+  docker build --tag rvm1111/arch:final-project-tours-v3 .
+  docker push rvm1111/arch:final-project-tours-v3
 
   helm uninstall final-project
   helm install final-project ./final-project-chart
@@ -195,5 +195,27 @@ helm install final-project-chart ./final-project-chart
   kubectl logs service/final-project-final-project-chart
   kubectl logs pod/my-release-kafka-0  
 
+  helm upgrade final-project ./final-project-chart
+
 
   https://arch.homework/otusapp/romanov/users/my-id
+
+  ./mvnw package
+  docker build --tag rvm1111/arch:final-project-orders-v2 .
+  docker push rvm1111/arch:final-project-orders-v2
+
+  ./mvnw package
+  docker build --tag rvm1111/arch:final-project-payments-v1 .
+  docker push rvm1111/arch:final-project-payments-v1
+
+  ./mvnw package
+  docker build --tag rvm1111/arch:final-project-hotels-v1 .
+  docker push rvm1111/arch:final-project-hotels-v1
+
+  ./mvnw package
+  docker build --tag rvm1111/arch:final-project-flights-v1 .
+  docker push rvm1111/arch:final-project-flights-v1
+
+
+  - name: SPRING_KAFKA_CONSUMER_GROUP_ID
+    value: foofoo

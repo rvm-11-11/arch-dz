@@ -1,41 +1,74 @@
-{{- if .Values.ingress.enabled -}}
-{{- $fullName := include "final-project-chart.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
-apiVersion: extensions/v1beta1
-{{- end }}
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}-protected
-  labels:
-    {{- include "final-project-chart.labels" . | nindent 4 }}
-  {{- with .Values.ingress.authProtected.annotations }}
+  name: final-project-ingress-protected
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.final-project.svc.cluster.local:4180/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-response-headers: "X-Auth-Request-Email,X-Auth-Request-User"
 spec:
-  {{- if .Values.ingress.authProtected.tls }}
-  tls:
-    {{- range .Values.authProtected.ingress.tls }}
-    - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
-  {{- end }}
   rules:
-    {{- range .Values.ingress.authProtected.hosts }}
-    - host: {{ .host | quote }}
+    - host: arch.homework
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
+          - path: /otusapp/romanov($|/)(tours.*)
+            pathType: ImplementationSpecific
             backend:
-              serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
-          {{- end }}
-    {{- end }}
-  {{- end }}
+              service:
+                name: rvm-final-project-tours-service
+                port:
+                  number: 8080
+          - path: /otusapp/romanov($|/)(users.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rvm-final-project-tours-service
+                port:
+                  number: 8080
+          - path: /otusapp/romanov($|/)(successfulOrders.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rvm-final-project-tours-service
+                port:
+                  number: 8080
+          - path: /otusapp/romanov($|/)(toursSearchFilter.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rvm-final-project-tours-service
+                port:
+                  number: 8080
+
+          - path: /otusapp/romanov($|/)(orders.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rvm-final-project-orders-service
+                port:
+                  number: 8080
+
+          - path: /otusapp/romanov($|/)(payments.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: final-project-payments-service
+                port:
+                  number: 8080
+
+          - path: /otusapp/romanov($|/)(flights.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rvm-final-project-flights-service
+                port:
+                  number: 8080
+
+          - path: /otusapp/romanov($|/)(hotelsBookings.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rvm-final-project-hotels-service
+                port:
+                  number: 8080

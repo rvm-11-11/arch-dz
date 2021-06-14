@@ -219,3 +219,11 @@ helm install final-project-chart ./final-project-chart
 
   - name: SPRING_KAFKA_CONSUMER_GROUP_ID
     value: foofoo
+
+## Tests
+
+  npm install -g newman-reporter-html
+
+  cd /home/superuser/Documents/OTUS/arch-dz/arch-final-project
+
+  newman run "Arch Final Project.postman_collection.json" --environment=local-k8s-ingress.postman_environment.json  --folder "ingress" -r html --insecure

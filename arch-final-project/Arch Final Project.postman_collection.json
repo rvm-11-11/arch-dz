@@ -12,817 +12,6 @@
 					"name": "NEW users management",
 					"item": [
 						{
-							"name": "My app Copy",
-							"item": [
-								{
-									"name": "1 Register User1",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;",
-													""
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													"pm.globals.set(\"user1_username\", pm.variables.replaceIn('{{$randomUserName}}'));",
-													"pm.globals.set(\"user1_firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));",
-													"pm.globals.set(\"user1_lastName\", pm.variables.replaceIn('{{$randomLastName}}'));",
-													"pm.globals.set(\"user1_email\", pm.variables.replaceIn('{{$randomExampleEmail}}'));",
-													"pm.globals.set(\"user1_password\", pm.variables.replaceIn('{{$randomPassword}}'));"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"username\": \"{{user1_username}}\",\n    \"firstName\": \"{{user1_firstName}}\",\n    \"lastName\": \"{{user1_lastName}}\",\n    \"email\": \"{{user1_email}}\",\n    \"password\": \"{{user1_password}}\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/register",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"register"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "2.1 Trying to get user info (not logged in)",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Content-Type is html, not json\", function () {",
-													"     pm.response.to.be.header(\"Content-Type\", \"text/html;charset=utf-8\");",
-													"});",
-													"",
-													"pm.test(\"Page contains login form\", function () {",
-													"    pm.expect(pm.response.text()).to.include(\"Log In\");",
-													"});",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/getUserInfo",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"getUserInfo"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "2.2 Trying to update user info (not logged in)",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Content-Type is html, not json\", function () {",
-													"     pm.response.to.be.header(\"Content-Type\", \"text/html;charset=utf-8\");",
-													"});",
-													"",
-													"pm.test(\"Page contains login form\", function () {",
-													"    pm.expect(pm.response.text()).to.include(\"Log In\");",
-													"});",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"firstName\": \"{{user1_firstName}}_new\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/updateUserInfo",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"updateUserInfo"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "3.1 Login Step 1 (User 1)",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Content-Type is html, not json\", function () {",
-													"     pm.response.to.be.header(\"Content-Type\", \"text/html;charset=utf-8\");",
-													"});",
-													"",
-													"pm.test(\"Page contains login form\", function () {",
-													"    pm.expect(pm.response.text()).to.include(\"Log In\");",
-													"});",
-													"",
-													"const $ = cheerio.load(responseBody);",
-													"",
-													"console.log($('#kc-form-login').attr('action'));",
-													"var loginUrl =  $('#kc-form-login').attr('action');",
-													"console.log(loginUrl);",
-													"pm.globals.set(\"keycloak_loginUrl\", loginUrl);",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": []
-										},
-										"url": {
-											"raw": "{{baseUrl}}/getUserInfo",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"getUserInfo"
-											]
-										},
-										"description": "Calling some protected page which forwards to auth form which we need to submit in next step"
-									},
-									"response": []
-								},
-								{
-									"name": "3.2 Login Step 2 (User 1)",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": [
-												{
-													"key": "username",
-													"value": "{{user1_username}}",
-													"type": "text"
-												},
-												{
-													"key": "password",
-													"value": "{{user1_password}}",
-													"type": "text"
-												}
-											]
-										},
-										"url": {
-											"raw": "{{keycloak_loginUrl}}",
-											"host": [
-												"{{keycloak_loginUrl}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "4 Get User Info",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"User info has expected values\", function () {",
-													"    var jsonData = pm.response.json();",
-													"    pm.expect(jsonData.username).to.eql(pm.variables.get(\"user1_username\").toLowerCase());",
-													"    pm.expect(jsonData.firstName).to.eql(pm.variables.get(\"user1_firstName\"));",
-													"    pm.expect(jsonData.lastName).to.eql(pm.variables.get(\"user1_lastName\"));",
-													"    pm.expect(jsonData.email).to.eql(pm.variables.get(\"user1_email\").toLowerCase());",
-													"});",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"method": "GET",
-										"header": [],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": []
-										},
-										"url": {
-											"raw": "{{baseUrl}}/getUserInfo",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"getUserInfo"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "5.1 Update User Info User1",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"firstName\": \"{{user1_firstName}}_new\",\n    \"lastName\": \"{{user1_lastName}}_new\",\n    \"email\": \"{{user1_email}}_new\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/updateUserInfo",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"updateUserInfo"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "5.2 Check user updated",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"User info has expected values\", function () {",
-													"    var jsonData = pm.response.json();",
-													"    pm.expect(jsonData.username).to.eql(pm.variables.get(\"user1_username\").toLowerCase());",
-													"    pm.expect(jsonData.firstName).to.eql(pm.variables.get(\"user1_firstName\") + \"_new\");",
-													"    pm.expect(jsonData.lastName).to.eql(pm.variables.get(\"user1_lastName\") + \"_new\");",
-													"    pm.expect(jsonData.email).to.eql(pm.variables.get(\"user1_email\").toLowerCase() + \"_new\");",
-													"});",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"method": "GET",
-										"header": [],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": []
-										},
-										"url": {
-											"raw": "{{baseUrl}}/getUserInfo",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"getUserInfo"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "6.1 Logout User1 Step1",
-									"event": [
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													"const jar = pm.cookies.jar();",
-													"",
-													"jar.clear(pm.request.url, function (error) {",
-													"  // error - <Error>",
-													"});",
-													"",
-													"jar.clear(\"http://arch.homework/\", function (error) {",
-													"  // error - <Error>",
-													"});"
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "https://arch.homework/auth/realms/myrealm/protocol/openid-connect/logout",
-											"protocol": "https",
-											"host": [
-												"arch",
-												"homework"
-											],
-											"path": [
-												"auth",
-												"realms",
-												"myrealm",
-												"protocol",
-												"openid-connect",
-												"logout"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "6.2 Logout User1 Step2",
-									"event": [
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													""
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"method": "GET",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "https://arch.homework/oauth2/sign_out",
-											"protocol": "https",
-											"host": [
-												"arch",
-												"homework"
-											],
-											"path": [
-												"oauth2",
-												"sign_out"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "7 Register User2",
-									"event": [
-										{
-											"listen": "prerequest",
-											"script": {
-												"exec": [
-													"pm.globals.set(\"user2_username\", pm.variables.replaceIn('{{$randomUserName}}'));",
-													"pm.globals.set(\"user2_firstName\", pm.variables.replaceIn('{{$randomFirstName}}'));",
-													"pm.globals.set(\"user2_lastName\", pm.variables.replaceIn('{{$randomLastName}}'));",
-													"pm.globals.set(\"user2_email\", pm.variables.replaceIn('{{$randomExampleEmail}}'));",
-													"pm.globals.set(\"user2_password\", pm.variables.replaceIn('{{$randomPassword}}'));"
-												],
-												"type": "text/javascript"
-											}
-										},
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"username\": \"{{user2_username}}\",\n    \"firstName\": \"{{user2_firstName}}\",\n    \"lastName\": \"{{user2_lastName}}\",\n    \"email\": \"{{user2_email}}\",\n    \"password\": \"{{user2_password}}\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/register",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"register"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "8.1 Login Step 1 (User 2)",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Content-Type is html, not json\", function () {",
-													"     pm.response.to.be.header(\"Content-Type\", \"text/html;charset=utf-8\");",
-													"});",
-													"",
-													"pm.test(\"Page contains login form\", function () {",
-													"    pm.expect(pm.response.text()).to.include(\"Log In\");",
-													"});",
-													"",
-													"const $ = cheerio.load(responseBody);",
-													"",
-													"console.log($('#kc-form-login').attr('action'));",
-													"var loginUrl =  $('#kc-form-login').attr('action');",
-													"console.log(loginUrl);",
-													"pm.globals.set(\"keycloak_loginUrl\", loginUrl);",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "GET",
-										"header": [],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": []
-										},
-										"url": {
-											"raw": "{{baseUrl}}/getUserInfo",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"getUserInfo"
-											]
-										},
-										"description": "Calling some protected page which forwards to auth form which we need to submit in next step"
-									},
-									"response": []
-								},
-								{
-									"name": "8.2 Login Step 2 (User 2)",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"Status code is 200\", function () {",
-													"    pm.response.to.have.status(200);",
-													"});",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": [
-												{
-													"key": "username",
-													"value": "{{user2_username}}",
-													"type": "text"
-												},
-												{
-													"key": "password",
-													"value": "{{user2_password}}",
-													"type": "text"
-												}
-											]
-										},
-										"url": {
-											"raw": "{{keycloak_loginUrl}}",
-											"host": [
-												"{{keycloak_loginUrl}}"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "9 Check it is User2 info",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"User info has expected values\", function () {",
-													"    var jsonData = pm.response.json();",
-													"    pm.expect(jsonData.username).to.eql(pm.variables.get(\"user2_username\").toLowerCase());",
-													"    pm.expect(jsonData.firstName).to.eql(pm.variables.get(\"user2_firstName\"));",
-													"    pm.expect(jsonData.lastName).to.eql(pm.variables.get(\"user2_lastName\"));",
-													"    pm.expect(jsonData.email).to.eql(pm.variables.get(\"user2_email\").toLowerCase());",
-													"});",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"method": "GET",
-										"header": [],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": []
-										},
-										"url": {
-											"raw": "{{baseUrl}}/getUserInfo",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"getUserInfo"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "10.1 Update User Info User2",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;"
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"firstName\": \"{{user2_firstName}}_new\",\n    \"lastName\": \"{{user2_lastName}}_new\",\n    \"email\": \"{{user2_email}}_new\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/updateUserInfo",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"updateUserInfo"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "10.2 Check User2 updated",
-									"event": [
-										{
-											"listen": "test",
-											"script": {
-												"exec": [
-													"pm.test(\"User info has expected values\", function () {",
-													"    var jsonData = pm.response.json();",
-													"    pm.expect(jsonData.username).to.eql(pm.variables.get(\"user2_username\").toLowerCase());",
-													"    pm.expect(jsonData.firstName).to.eql(pm.variables.get(\"user2_firstName\") + \"_new\");",
-													"    pm.expect(jsonData.lastName).to.eql(pm.variables.get(\"user2_lastName\") + \"_new\");",
-													"    pm.expect(jsonData.email).to.eql(pm.variables.get(\"user2_email\").toLowerCase() + \"_new\");",
-													"});",
-													"",
-													"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-													"tests[\"[INFO] Response: \" + responseBody] = true;",
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"method": "GET",
-										"header": [],
-										"body": {
-											"mode": "urlencoded",
-											"urlencoded": []
-										},
-										"url": {
-											"raw": "{{baseUrl}}/getUserInfo",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"getUserInfo"
-											]
-										}
-									},
-									"response": []
-								}
-							]
-						},
-						{
-							"name": "reset users",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 200\", function () {",
-											"    pm.response.to.have.status(200);",
-											"});",
-											"",
-											"pm.test(\"Body is correct\", function () {",
-											"    pm.response.to.have.body(\"All users removed\");",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/users/reset",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"users",
-										"reset"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Logout Step1 Copy",
 							"event": [
 								{
@@ -846,8 +35,7 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-											"tests[\"[INFO] Response: \" + responseBody] = true;"
+											""
 										],
 										"type": "text/javascript"
 									}
@@ -889,8 +77,7 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-											"tests[\"[INFO] Response: \" + responseBody] = true;"
+											""
 										],
 										"type": "text/javascript"
 									}
@@ -950,7 +137,10 @@
 											"",
 											"var jsonData = pm.response.json();",
 											"pm.globals.set(\"customerId\", jsonData.userId);",
-											""
+											"",
+											"",
+											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+											"tests[\"[INFO] Response: \" + responseBody] = true;"
 										],
 										"type": "text/javascript"
 									}
@@ -1007,7 +197,10 @@
 											"",
 											"var jsonData = pm.response.json();",
 											"pm.globals.set(\"adminId\", jsonData.userId);",
-											""
+											"",
+											"",
+											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+											"tests[\"[INFO] Response: \" + responseBody] = true;"
 										],
 										"type": "text/javascript"
 									}
@@ -1059,9 +252,7 @@
 											"var loginUrl =  $('#kc-form-login').attr('action');",
 											"console.log(loginUrl);",
 											"pm.globals.set(\"keycloak_loginUrl\", loginUrl);",
-											"",
-											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-											"tests[\"[INFO] Response: \" + responseBody] = true;"
+											""
 										],
 										"type": "text/javascript"
 									}
@@ -1158,7 +349,10 @@
 											"    var jsonData = pm.response.json();",
 											"    pm.expect(jsonData.userId).to.eql(pm.globals.get(\"adminId\"));",
 											"});",
-											""
+											"",
+											"",
+											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+											"tests[\"[INFO] Response: \" + responseBody] = true;"
 										],
 										"type": "text/javascript"
 									}
@@ -1226,7 +420,11 @@
 											"",
 											"    pm.expect(pm.response.json()).to.deep.include(expectedUser2);",
 											"",
-											"});"
+											"});",
+											"",
+											"",
+											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+											"tests[\"[INFO] Response: \" + responseBody] = true;"
 										],
 										"type": "text/javascript"
 									}
@@ -1277,7 +475,11 @@
 											"",
 											"pm.test(\"Body is correct\", function () {",
 											"    pm.response.to.have.body(\"All tours removed\");",
-											"});"
+											"});",
+											"",
+											"",
+											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+											"tests[\"[INFO] Response: \" + responseBody] = true;"
 										],
 										"type": "text/javascript"
 									}
@@ -1321,7 +523,11 @@
 											"",
 											"pm.test(\"Body is correct\", function () {",
 											"    pm.response.to.have.body(\"All orders removed\");",
-											"});"
+											"});",
+											"",
+											"",
+											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+											"tests[\"[INFO] Response: \" + responseBody] = true;"
 										],
 										"type": "text/javascript"
 									}
@@ -1365,7 +571,11 @@
 											"",
 											"pm.test(\"Body is correct\", function () {",
 											"    pm.response.to.have.body(\"All Payments removed\");",
-											"});"
+											"});",
+											"",
+											"",
+											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+											"tests[\"[INFO] Response: \" + responseBody] = true;"
 										],
 										"type": "text/javascript"
 									}
@@ -1409,7 +619,11 @@
 											"",
 											"pm.test(\"Body is correct\", function () {",
 											"    pm.response.to.have.body(\"All Flights removed\");",
-											"});"
+											"});",
+											"",
+											"",
+											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+											"tests[\"[INFO] Response: \" + responseBody] = true;"
 										],
 										"type": "text/javascript"
 									}
@@ -1453,7 +667,11 @@
 											"",
 											"pm.test(\"Body is correct\", function () {",
 											"    pm.response.to.have.body(\"All HotelsBookings removed\");",
-											"});"
+											"});",
+											"",
+											"",
+											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+											"tests[\"[INFO] Response: \" + responseBody] = true;"
 										],
 										"type": "text/javascript"
 									}
@@ -1497,7 +715,11 @@
 											"",
 											"pm.test(\"Body is correct\", function () {",
 											"    pm.response.to.have.body(\"All successfulOrders removed\");",
-											"});"
+											"});",
+											"",
+											"",
+											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+											"tests[\"[INFO] Response: \" + responseBody] = true;"
 										],
 										"type": "text/javascript"
 									}
@@ -2061,8 +1283,10 @@
 											"    pm.response.to.have.status(200);",
 											"});",
 											"",
-											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-											"tests[\"[INFO] Response: \" + responseBody] = true;"
+											"pm.test(\"User ID is correct\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.userId).to.eql(pm.globals.get(\"adminId\"));",
+											"});"
 										],
 										"type": "text/javascript"
 									}
@@ -3065,8 +2289,10 @@
 											"    pm.response.to.have.status(200);",
 											"});",
 											"",
-											"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
-											"tests[\"[INFO] Response: \" + responseBody] = true;"
+											"pm.test(\"User ID is correct\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.userId).to.eql(pm.globals.get(\"customerId\"));",
+											"});"
 										],
 										"type": "text/javascript"
 									}
@@ -3185,7 +2411,7 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											"setTimeout(function(){}, 1000);"
+											"setTimeout(function(){}, 3000);"
 										],
 										"type": "text/javascript"
 									}
@@ -3347,7 +2573,7 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											"setTimeout(function(){}, 1000);"
+											"setTimeout(function(){}, 3000);"
 										],
 										"type": "text/javascript"
 									}
@@ -3574,7 +2800,7 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											"setTimeout(function(){}, 1000);"
+											"setTimeout(function(){}, 3000);"
 										],
 										"type": "text/javascript"
 									}
@@ -3690,7 +2916,7 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											"setTimeout(function(){}, 1000);"
+											"setTimeout(function(){}, 3000);"
 										],
 										"type": "text/javascript"
 									}
@@ -3924,6 +3150,50 @@
 									],
 									"path": [
 										"hotelsBookings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset users",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Body is correct\", function () {",
+											"    pm.response.to.have.body(\"All users removed\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/reset",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"reset"
 									]
 								}
 							},

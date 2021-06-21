@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: final-project-ingress-not-protected
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - path: /otusapp/romanov($|/)(users/register)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: rvm-final-project-tours-service
+                port:
+                  number: 8080

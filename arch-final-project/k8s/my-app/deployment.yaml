@@ -1,0 +1,196 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-final-project-tours-deployment
+  labels:
+    app: final-project-tours
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: final-project-tours
+  template:
+    metadata:
+      labels:
+        app: final-project-tours
+    spec:
+      containers:
+        - name: final-project-tours
+          image: rvm1111/arch:final-project-tours-v1
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.final-project.svc.cluster.local:9092
+          ports:
+            - name: web
+              containerPort: 8081
+          livenessProbe:
+            httpGet:
+              port: 8081
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8081
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-final-project-orders-deployment
+  labels:
+    app: final-project-orders
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: final-project-orders
+  template:
+    metadata:
+      labels:
+        app: final-project-orders
+    spec:
+      containers:
+        - name: final-project-orders
+          image: rvm1111/arch:final-project-orders-v1
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.final-project.svc.cluster.local:9092
+            - name: RVM_TOURS_SERVICE_ROOT_URL
+              value: http://rvm-final-project-tours-service:8080
+          ports:
+            - name: web
+              containerPort: 8082
+          livenessProbe:
+            httpGet:
+              port: 8082
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8082
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-final-project-payments-deployment
+  labels:
+    app: final-project-payments
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: final-project-payments
+  template:
+    metadata:
+      labels:
+        app: final-project-payments
+    spec:
+      containers:
+        - name: final-project-payments
+          image: rvm1111/arch:final-project-payments-v1
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.final-project.svc.cluster.local:9092
+          ports:
+            - name: web
+              containerPort: 8083
+          livenessProbe:
+            httpGet:
+              port: 8083
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8083
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-final-project-flights-deployment
+  labels:
+    app: final-project-flights
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: final-project-flights
+  template:
+    metadata:
+      labels:
+        app: final-project-flights
+    spec:
+      containers:
+        - name: final-project-flights
+          image: rvm1111/arch:final-project-flights-v1
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.final-project.svc.cluster.local:9092
+          ports:
+            - name: web
+              containerPort: 8084
+          livenessProbe:
+            httpGet:
+              port: 8084
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8084
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rvm-final-project-hotels-deployment
+  labels:
+    app: final-project-hotels
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: final-project-hotels
+  template:
+    metadata:
+      labels:
+        app: final-project-hotels
+    spec:
+      containers:
+        - name: final-project-hotels
+          image: rvm1111/arch:final-project-hotels-v1
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-release-kafka.final-project.svc.cluster.local:9092
+          ports:
+            - name: web
+              containerPort: 8085
+          livenessProbe:
+            httpGet:
+              port: 8085
+              path: /health
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8085
+              path: /health
+            initialDelaySeconds: 20
+            periodSeconds: 5

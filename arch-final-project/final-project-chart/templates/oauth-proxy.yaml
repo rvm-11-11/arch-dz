@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        k8s-app: oauth2-proxy
+    spec:
+      initContainers:
+        - name: check-keycloak-ready
+          image: dwdraju/alpine-curl-jq
+          command:
+            - sh
+            - "-c"
+            - |
+              until $(curl --output /dev/null --silent --head --fail http://final-project-keyclo/auth/realms/master); do
+              printf '.'
+              sleep 5
+              done
+      containers:
+      - args:
+        - --provider=oidc
+        - --email-domain=*
+        - --upstream=file:///dev/null
+        - --http-address=0.0.0.0:4180
+        - --cookie-name=s
+        - --pass-authorization-header=true
+        - --pass-access-token=true
+        - --set-xauthrequest=true
+        - --oidc-issuer-url=http://final-project-keyclo/auth/realms/myrealm
+        - --ssl-insecure-skip-verify=true
+        - --insecure-oidc-skip-issuer-verification=true
+        - --cookie-secure=false
+        - --login-url=http://arch.homework/auth/realms/myrealm/protocol/openid-connect/auth
+        - --redeem-url=http://final-project-keyclo/auth/realms/myrealm/protocol/openid-connect/token
+        env:
+#        - name: OAUTH2_PROXY_CLIENT_ID
+#          value: 4fcc15e1cbc8100cef72
+#        - name: OAUTH2_PROXY_CLIENT_SECRET
+#          value: a7ddb7d132328ffb35ecfe8e2f1eb80fa0f292f5
+        - name: OAUTH2_PROXY_CLIENT_ID
+          value: account
+        - name: OAUTH2_PROXY_CLIENT_SECRET
+          value: TOP_SECRET
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          value: 12312adfa342abas
+        image: quay.io/pusher/oauth2_proxy:latest
+        imagePullPolicy: Always
+        name: oauth2-proxy
+        ports:
+        - containerPort: 4180
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
+spec:
+  ports:
+  - name: http
+    port: 4180
+    protocol: TCP
+    targetPort: 4180
+  selector:
+    k8s-app: oauth2-proxy
